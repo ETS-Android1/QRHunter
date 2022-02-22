@@ -1,11 +1,7 @@
 package com.example.qrhunter;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,8 +10,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.internal.Constants;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,13 +33,12 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -65,8 +64,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("qrcodes");
-
         setContentView(R.layout.activity_map);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+        bottomNav.setSelectedItemId(R.id.search);
+        /**
+         * The method that is called when a nav item is clicked in this activity
+         * @param item
+         * The item that gets selected
+         */
+        bottomNav.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.camera) {
+                Intent intent = new Intent(MapActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+            return true;
+        });
         infoLayout = findViewById(R.id.infolayout);
         infoLayout.setVisibility(View.INVISIBLE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -245,4 +257,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         address.setText(marker.getTitle());
         return false;
     }
+
+
 }
