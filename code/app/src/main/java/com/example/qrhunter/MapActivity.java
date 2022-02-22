@@ -50,7 +50,7 @@ import java.util.HashMap;
  * This class is responsible for displaying the map of qr codes to users
  */
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapActivity extends BaseNavigatableActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private GoogleMap map;
     LinearLayout infoLayout;
@@ -64,27 +64,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("qrcodes");
-        setContentView(R.layout.activity_map);
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
-        bottomNav.setSelectedItemId(R.id.search);
-        /**
-         * The method that is called when a nav item is clicked in this activity
-         * @param item
-         * The item that gets selected
-         */
-        bottomNav.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.camera) {
-                Intent intent = new Intent(MapActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-            return true;
-        });
         infoLayout = findViewById(R.id.infolayout);
         infoLayout.setVisibility(View.INVISIBLE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapView);
         mapFragment.getMapAsync(this);
-
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
         // Initialize the AutocompleteSupportFragment.
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(),  getResources().getString(R.string.google_maps_key));
@@ -195,6 +180,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         }
                     }
                 });
+    }
+    /**
+     * This is called by the base activity to get the layout
+     * @return returns the layout for this activity
+     */
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_map;
+    }
+
+    /**
+     * This is called by the base activity to get the selected item on create
+     * @return returns item id corresponding to the activity
+     */
+    @Override
+    protected int getSelectedItemId() {
+        return R.id.search;
     }
 
     /**

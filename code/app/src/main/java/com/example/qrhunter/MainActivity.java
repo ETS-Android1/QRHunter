@@ -23,31 +23,29 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.security.spec.ECField;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseNavigatableActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
-        NavigationUI.setupWithNavController(bottomNav, navController);
-        /**
-         * The method that is called when a nav item is clicked in this activity
-         * @param item
-         * The item that gets selected
-         */
-        bottomNav.setOnItemSelectedListener(item -> {
-                if (item.getItemId() == R.id.search) {
-                    Intent intent = new Intent(MainActivity.this, MapActivity.class);
-                    startActivity(intent);
-                }
-            return true;
-        });
-
+    }
+    /**
+     * This is called by the base activity to get the layout
+     * @return returns the layout for this activity
+     */
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_main;
     }
 
 
+    /**
+     * This is called by the base activity to get the selected item on create
+     * @return returns item id corresponding to the activity
+     */
+    @Override
+    protected int getSelectedItemId() {
+        return R.id.camera;
+    }
 
 }
