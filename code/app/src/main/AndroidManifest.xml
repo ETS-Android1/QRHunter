@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRHunter">
         <activity
+            android:name=".ProfileQRInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserQRInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
