@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoggedinProfile"
+    android:padding="50dp">
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_profile"
+        android:id="@+id/icon"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="player name"
+        android:layout_toRightOf="@+id/icon"
+        android:layout_marginLeft="60dp"
+        android:textSize="30sp"
+        android:id="@+id/name"/>
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/icon"
+        android:layout_marginTop="20dp"
+        android:text="total points"
+        android:id="@+id/total"/>
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/total"
+        android:layout_marginTop="10dp"
+        android:text="scanned"
+        android:id="@+id/scan"/>
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/scan"
+        android:layout_marginTop="10dp"
+        android:text="highest"
+        android:id="@+id/highest"/>
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/highest"
+        android:layout_marginTop="10dp"
+        android:text="lowest"
+        android:id="@+id/lowest"/>
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="25dp"
+        android:layout_below="@id/name"
+        android:layout_marginTop="5dp"
+        android:text="Rank"
+        android:textAlignment="center"
+        android:id="@+id/rank"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/rank"
+        android:layout_toRightOf="@id/total"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="1000/1000 players"
+        android:textAlignment="center"
+        android:id="@+id/rankPlayer1"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/rankPlayer1"
+        android:layout_toRightOf="@id/scan"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="112/1000 players"
+        android:textAlignment="center"
+        android:id="@+id/rankPlayer2"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/rankPlayer2"
+        android:layout_toRightOf="@id/highest"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="112/1000 players"
+        android:textAlignment="center"
+        android:id="@+id/rankPlayer3"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lowest"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentLeft="true"
+        android:text="Generate Login"
+        android:textStyle="bold|italic"
+        android:textSize="13sp"
+        android:id="@+id/generateLogin"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rankPlayer3"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_toEndOf="@id/generateLogin"
+        android:layout_marginStart="10dp"
+        android:text="Generate Status"
+        android:textStyle="bold|italic"
+        android:textSize="13sp"
+        android:id="@+id/generateStatus"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generateLogin"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="10dp"
+        android:text="Top Scores"
+        android:textStyle="bold|italic"
+        android:textSize="10sp"
+        android:id="@+id/topScores"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generateLogin"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/topScores"
+        android:layout_marginStart="5dp"
+        android:text="Low Scores"
+        android:textStyle="bold|italic"
+        android:textSize="10sp"
+        android:id="@+id/lowScore"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generateStatus"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/lowScore"
+        android:layout_marginStart="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="5dp"
+        android:text="Date"
+        android:textStyle="bold|italic"
+        android:textSize="10sp"
+        android:id="@+id/date"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topScores"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/recyclerView"/>
+
+
+</RelativeLayout>
