@@ -1,21 +1,17 @@
 package com.example.qrhunter;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
 //Refrences: https://www.youtube.com/watch?v=NhiUTjm2BrE
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ListCodesActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     ListView QRCode;
     ArrayAdapter<OtherQRCodes> codeAdapter;

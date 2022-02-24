@@ -33,10 +33,10 @@ public class CustomQRList  extends ArrayAdapter<OtherQRCodes>{
         TextView scanners = view.findViewById(R.id.scanners_text);
         TextView date= view.findViewById(R.id.date_text);
         TextView points= view.findViewById(R.id.points_text);
-        location.setText(codes.getLocation());
-        scanners.setText(String.valueOf(codes.getNumScanners()));
-        date.setText(String.valueOf( codes.getDate()));
-        points.setText(String.valueOf(codes.getPoints()));
+        location.setText("Location: "+codes.getLocation());
+        scanners.setText("Scanners: "+String.valueOf(codes.getNumScanners()));
+        date.setText("Date: "+String.valueOf( codes.getDate()));
+        points.setText("Points: "+String.valueOf(codes.getPoints()));
         return view;
     }
 
