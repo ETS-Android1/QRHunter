@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-public class MainActivity extends AppCompatActivity implements Signup_Fragment.OnFragmentInteractionListener {
+public class Login_Signup_Activity extends AppCompatActivity implements Signup_Fragment.OnFragmentInteractionListener {
 
     Button btnLogin, btnLoginQR, btnSignup;
     TextInputLayout txtInputUsernameLogin, txtInputPasswordLogin;
