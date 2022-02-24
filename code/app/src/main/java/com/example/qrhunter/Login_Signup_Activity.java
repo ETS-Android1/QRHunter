@@ -3,8 +3,6 @@ package com.example.qrhunter;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputLayout;
@@ -17,7 +15,7 @@ public class Login_Signup_Activity extends AppCompatActivity implements Signup_F
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login_signup);
         this.getSupportActionBar().hide();
 
         btnLogin = findViewById(R.id.btnLogin);
