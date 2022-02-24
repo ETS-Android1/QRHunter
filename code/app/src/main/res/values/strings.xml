@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">QRHunter</string>
+    <string name="map">Map for qr codes</string>
+    <string name="google_maps_key">AIzaSyClAbqjqW9qyAjhVjoc4_i8USS7rLA1Lj8</string>
+    <string name="search">search</string>
+    <string name="camera">camera</string>
+    <string name="qrcode">qrcode</string>
+    <string name="profile">profile</string>
 </resources>
