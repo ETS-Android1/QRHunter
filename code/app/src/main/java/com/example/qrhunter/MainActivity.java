@@ -23,7 +23,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.security.spec.ECField;
 
-public class MainActivity extends BaseNavigatableActivity {
+import android.view.View;
+import android.widget.Button;
+
+public class MainActivity extends AppCompatActivity {
+    Button userQRInfo;
+    Button profileQRInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

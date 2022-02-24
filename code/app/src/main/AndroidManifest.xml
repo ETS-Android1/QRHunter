@@ -22,6 +22,10 @@
 
         <activity
             android:name=".MapActivity"
+            android:name=".ProfileQRInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserQRInfoActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
