@@ -22,10 +22,15 @@
 
         <activity
             android:name=".MapActivity"
+            android:exported="false" />
+        <activity  
             android:name=".ProfileQRInfoActivity"
             android:exported="false" />
         <activity
             android:name=".UserQRInfoActivity"
+            android:exported="false" />
+        <activity 
+            android:name=".Login_Signup_Activity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
