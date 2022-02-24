@@ -21,7 +21,7 @@ public class ListCodesActivity extends AppCompatActivity implements AdapterView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activitylist_main);
 
         QRCode = findViewById(R.id.qr_list);
 
