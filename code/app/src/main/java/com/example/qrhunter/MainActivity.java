@@ -26,7 +26,7 @@ import java.security.spec.ECField;
 import android.view.View;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseNavigatableActivity {
     Button userQRInfo;
     Button profileQRInfo;
 
