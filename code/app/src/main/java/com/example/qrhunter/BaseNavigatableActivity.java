@@ -36,6 +36,12 @@ public abstract class BaseNavigatableActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.camera) {
                 Intent intent = new Intent(BaseNavigatableActivity.this, MainActivity.class);
                 startActivity(intent);
+            } else if (item.getItemId() == R.id.qrcode) {
+                Intent intent = new Intent(BaseNavigatableActivity.this, ListCodesActivity.class);
+                startActivity(intent);
+            }else if (item.getItemId() == R.id.profile) {
+                Intent intent = new Intent(BaseNavigatableActivity.this, LoggedinProfile.class);
+                startActivity(intent);
             }
             return true;
         });

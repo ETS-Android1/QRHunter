@@ -32,7 +32,16 @@ public class MainActivity extends BaseNavigatableActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        Button login = findViewById(R.id.login);
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Login_Signup_Activity.class);
+                startActivity(intent);
+            }
+        });
     }
     /**
      * This is called by the base activity to get the layout
