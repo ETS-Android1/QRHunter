@@ -2,6 +2,7 @@ package com.example.qrhunter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,7 +12,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Date;
 //Refrences: https://www.youtube.com/watch?v=NhiUTjm2BrE
-public class ListCodesActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ListCodesActivity extends BaseNavigatableActivity implements AdapterView.OnItemClickListener {
 
     ListView QRCode;
     ArrayAdapter<OtherQRCodes> codeAdapter;
@@ -19,9 +20,18 @@ public class ListCodesActivity extends AppCompatActivity implements AdapterView.
 
 
     @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activitylist_main;
+    }
+
+    @Override
+    protected int getSelectedItemId() {
+        return R.id.qrcode;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activitylist_main);
 
         QRCode = findViewById(R.id.qr_list);
 
@@ -47,5 +57,7 @@ public class ListCodesActivity extends AppCompatActivity implements AdapterView.
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         //use this to get info of the clicked item
         // adapterView.getItemAtPosition(i);
+        Intent intent = new Intent(ListCodesActivity.this, UserQRInfoActivity.class);
+        startActivity(intent);
     }
 }

@@ -8,17 +8,26 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class PlayerProfile extends AppCompatActivity {
+public class PlayerProfile extends BaseNavigatableActivity {
 
     TextView ProfileName, Total, Scanned, Highest, Lowest, RankOfTotal, RankOfScanned, RankOfHighest;
     RecyclerView recyclerView;
     ArrayList<String> points = new ArrayList<>();
 
     @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_player_profile;
+    }
+
+    @Override
+    protected int getSelectedItemId() {
+        return R.id.profile;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_player_profile);
         ProfileName = findViewById(R.id.name);
         Total = findViewById(R.id.total);
         Scanned = findViewById(R.id.scan);

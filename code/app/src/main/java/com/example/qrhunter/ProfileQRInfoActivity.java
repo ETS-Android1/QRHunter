@@ -11,11 +11,21 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class ProfileQRInfoActivity extends AppCompatActivity {
+public class ProfileQRInfoActivity extends BaseNavigatableActivity {
     ListView seenList;
     ArrayList<Profile> seenDataList;
     ArrayAdapter<Profile> seenAdapter;
     Button back;
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_profile_qrinfo;
+    }
+
+    @Override
+    protected int getSelectedItemId() {
+        return R.id.qrcode;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
