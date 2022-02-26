@@ -35,6 +35,8 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -122,23 +124,39 @@ public class MapActivity extends BaseNavigatableActivity implements OnMapReadyCa
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                HashMap hashmap = (HashMap) document.getData();
-                                GeoPoint geopoint = new GeoPoint((Double) hashmap.get("lat"),(Double) hashmap.get("lng"));
-                                try {
-                                    MarkerOptions options = new MarkerOptions().position(new LatLng(geopoint.getLatitude(), geopoint.getLongitude())).title((String) hashmap.get("address")).snippet(((Long) hashmap.get("score")).toString());
-                                    map.addMarker(options);
-                                } catch (Exception e){
+                            try {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    HashMap hashmap = (HashMap) document.getData();
+                                    DocumentReference reference = (DocumentReference) hashmap.get("location");
+                                    reference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (!task.isSuccessful()) {
+                                                return;
+                                            }
+                                            HashMap hashmaplocation = (HashMap) task.getResult().getData();
+                                            GeoPoint geopoint = (GeoPoint) hashmaplocation.get("location");
+                                            try {
+                                                MarkerOptions options = new MarkerOptions().position(new LatLng(geopoint.getLatitude(), geopoint.getLongitude())).title((String) hashmaplocation.get("address")).snippet(((Long) hashmap.get("score")).toString());
+                                                map.addMarker(options);
+                                            } catch (Exception e) {
+                                                String msg = e.getMessage();
+                                                Log.e("MAPERROR", msg);
+                                            }
+                                        }
+
+                                    });
+                                }
+                            }
+                            catch (Exception e) {
                                     String msg = e.getMessage();
                                     Log.e("MAPERROR", msg);
-                                }
-
-
                             }
                         }
                     }
                 });
-    }
+            }
 
     /**
      * This is called when the google map widget is ready for display
