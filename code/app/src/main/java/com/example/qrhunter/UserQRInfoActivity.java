@@ -13,7 +13,7 @@ import android.widget.ListView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class UserQRInfoActivity extends AppCompatActivity {
+public class UserQRInfoActivity extends BaseNavigatableActivity {
     ListView commentList;
     ArrayList<Comment> commentDataList;
     ArrayAdapter<Comment> commentAdapter;
@@ -24,9 +24,18 @@ public class UserQRInfoActivity extends AppCompatActivity {
 
 
     @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_user_qrinfo;
+    }
+
+    @Override
+    protected int getSelectedItemId() {
+        return R.id.profile;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_qrinfo);
 
         commentList = findViewById(R.id.commentList);
         commentDataList = new ArrayList<>();

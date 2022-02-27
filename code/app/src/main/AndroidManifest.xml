@@ -29,8 +29,14 @@
         <activity
             android:name=".UserQRInfoActivity"
             android:exported="false" />
-        <activity 
-            android:name=".Login_Signup_Activity"
+        <activity
+        android:name=".Login_Signup_Activity"
+        android:exported="false" />
+        <activity
+            android:name=".LoggedinProfile"
+            android:exported="false" />
+        <activity
+            android:name=".ListCodesActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
