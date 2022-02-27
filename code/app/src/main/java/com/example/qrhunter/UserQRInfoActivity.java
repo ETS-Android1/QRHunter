@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.lang.reflect.Array;
@@ -16,10 +17,10 @@ public class UserQRInfoActivity extends AppCompatActivity {
     ListView commentList;
     ArrayList<Comment> commentDataList;
     ArrayAdapter<Comment> commentAdapter;
-    Button back;
+    ImageButton back;
     Button delete;
     EditText addComment;
-    Button sendComment;
+    ImageButton sendComment;
 
 
     @Override

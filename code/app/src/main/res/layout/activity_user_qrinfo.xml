@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
+        <ImageButton
             android:id="@+id/backQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,18 +19,21 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
-            android:text="back"></Button>
+            android:layout_centerVertical="true"
+            android:src="@drawable/back"></ImageButton>
 
         <Button
             android:id="@+id/deleteQR"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="0dp"
-            android:gravity="right"
-            android:text="delete"></Button>
+            android:layout_gravity="right"
+            android:text="DELETE"
+            android:layout_centerVertical="true"
+            android:backgroundTint="#FF0000"></Button>
 
     </RelativeLayout>
 
@@ -76,17 +79,17 @@
                     android:id="@+id/QRScanned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="scanned by: "
+                    android:text="scanned: "
                     android:textSize="20sp">
                 </TextView>
 
-                <TextView
+                <ImageView
                     android:id="@+id/QRScannedImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X or check"
-                    android:textSize="20sp">
-                </TextView>
+                    android:src="@drawable/not_check"
+                    android:layout_gravity="center">
+                </ImageView>
 
             </LinearLayout>
         </LinearLayout>
@@ -129,13 +132,13 @@
 
         </EditText>
 
-        <Button
+        <ImageButton
             android:id="@+id/sendComment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-            android:text="send">
-        </Button>
+            android:src="@drawable/send">
+        </ImageButton>
     </LinearLayout>
 
     <RelativeLayout

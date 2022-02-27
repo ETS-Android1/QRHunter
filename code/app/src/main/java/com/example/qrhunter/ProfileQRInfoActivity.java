@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class ProfileQRInfoActivity extends AppCompatActivity {
     ListView seenList;
     ArrayList<Profile> seenDataList;
     ArrayAdapter<Profile> seenAdapter;
-    Button back;
+    ImageButton back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
