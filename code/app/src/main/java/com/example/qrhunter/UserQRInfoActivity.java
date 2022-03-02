@@ -1,25 +1,40 @@
 package com.example.qrhunter;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UserQRInfoActivity extends BaseNavigatableActivity {
     ListView commentList;
     ArrayList<Comment> commentDataList;
     ArrayAdapter<Comment> commentAdapter;
-    Button back;
+    ImageButton back;
     Button delete;
     EditText addComment;
-    Button sendComment;
+    ImageButton sendComment;
+    FirebaseFirestore db;
 
 
     @Override
@@ -39,9 +54,9 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         commentList = findViewById(R.id.commentList);
         commentDataList = new ArrayList<>();
 
-        commentDataList.add(new Comment("1", "AAAAAAA"));
-        commentDataList.add(new Comment("2", "BBBBBBB"));
-        commentDataList.add(new Comment("3", "fadspfoj"));
+        db = FirebaseFirestore.getInstance();
+        final CollectionReference collectionReference = db.collection("comments");
+        final String TAG = "UserQRInfoActivity";
 
 
         back = findViewById(R.id.backQR);
@@ -51,12 +66,50 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String text = addComment.getText().toString();
-                if (text != "") {
-                    commentDataList.add(new Comment("3", text));
+                String commentData = addComment.getText().toString();
+                String user = "test1";
+                HashMap<String, String> comment = new HashMap<>();
+                if (commentData != "") {
+                    commentDataList.add(new Comment(user, commentData));
+                    comment.put("Comment Data", commentData);
+
                     commentAdapter.notifyDataSetChanged();
                     addComment.setText("");
                 }
+                collectionReference
+                        .document(user)
+                        .set(comment)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                            // These are a method which gets executed when the task is succeeded
+
+                                Log.d(TAG, "Comment has been added successfully!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // These are a method which gets executed if there’s any problem
+                                Log.d(TAG, "Data could not be added!" + e.toString());
+                            }
+                        });
+            }
+        });
+
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                // Clear the old list
+                commentDataList.clear();
+                for(QueryDocumentSnapshot doc: value)
+                {
+                    Log.d(TAG, String.valueOf(doc.getData().get("Comment Data")));
+                    String user = doc.getId();
+                    String commentData = (String) doc.getData().get("Comment Data");
+                    commentDataList.add(new Comment(user, commentData)); // Adding the users and comments from FireStore
+                }
+                commentAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
             }
         });
 
