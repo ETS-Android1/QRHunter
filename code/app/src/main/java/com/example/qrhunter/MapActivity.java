@@ -57,7 +57,7 @@ interface GeolocationListener {
  * This class is responsible for displaying the map of qr codes to users
  */
 public class MapActivity extends BaseNavigatableActivity implements GeolocationListener, OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private HashMap<Double, HashMap<Double, HashMap<String, MarkerOptions>>> markers = new HashMap<>();
     private HashMap<MarkerOptions, Double> count = new HashMap<>();
     private GoogleMap map;

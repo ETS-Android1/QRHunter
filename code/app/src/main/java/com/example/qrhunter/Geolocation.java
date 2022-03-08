@@ -15,6 +15,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Geolocation {
     Float latitude;
@@ -25,6 +26,22 @@ public class Geolocation {
     public Geolocation(Float latitude, Float longitude) {
         coordinate.add(latitude);
         coordinate.add(longitude);
+    }
+
+    /**
+     * A function to upload a geolocation associated with a scan
+     * @param locationRef a reference to the location to be uploaded
+     * @param location the latitude, longiturde coordinates
+     * @param address the descriptive address of the location
+     * @param scan the scan associated with the location
+     * @param l an oncomplete listener
+     */
+    public static void uploadGeolocationForScan(DocumentReference locationRef, LatLng location, String address, DocumentReference scan, OnCompleteListener<Void> l) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("location", new GeoPoint(location.latitude, location.longitude));
+        data.put("address", address);
+        data.put("scan", scan);
+        locationRef.set(data).addOnCompleteListener(l);
     }
     /**
      * This is method queries all nearby locations from firebase and passes them to a listener

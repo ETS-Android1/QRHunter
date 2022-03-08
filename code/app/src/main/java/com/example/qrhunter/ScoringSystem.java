@@ -5,10 +5,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class ScoringSystem {
     FirebaseFirestore firebaseDB;
     public ScoringSystem() {}
-
-    public Float calculateScore(QRCode qrcode) {
+    // TODO implement more sophisticated scoring system
+    /**
+     * A function that calculates the score from a hash
+     * @param hash
+     * @return the score of the hash
+     */
+    public static Float calculateScore(String hash) {
         Float score = 0f;
-        //TODO
+        for (char el : hash.toCharArray()) {
+            score = score + el;
+        }
         return score;
     }
 
