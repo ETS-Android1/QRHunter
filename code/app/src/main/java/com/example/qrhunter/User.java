@@ -23,5 +23,6 @@ public class User {
 
     public boolean addComment(String comment, QRCode qrcode) {
         //TODO
+        return false;
     }
 }

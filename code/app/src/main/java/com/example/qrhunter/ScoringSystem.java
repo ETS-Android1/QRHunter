@@ -1,7 +1,9 @@
 package com.example.qrhunter;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class ScoringSystem {
-    Database firebaseDB;
+    FirebaseFirestore firebaseDB;
     public ScoringSystem() {}
 
     public Float calculateScore(QRCode qrcode) {
@@ -13,15 +15,17 @@ public class ScoringSystem {
     public QRCode getGlobalHighestScoringQRCode() {
         QRCode highestScoringCode;
         //TODO
-        return highestScoringCode;
+        return new QRCode();
     }
 
     public QRCode getHighestScoringCodeForUser(User u) {
         //TODO
+        return new QRCode();
     }
 
     public QRCode getLowestScoringCodeForUser(User u) {
         //TODO
+        return new QRCode();
     }
 
 }

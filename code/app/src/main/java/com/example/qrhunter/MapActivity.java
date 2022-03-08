@@ -50,13 +50,14 @@ import java.util.HashMap;
 // https://stackoverflow.com/questions/40142331/how-to-request-location-permission-at-runtime
 // https://stackoverflow.com/questions/46630507/how-to-run-a-geo-nearby-query-with-firestore
 // https://stackoverflow.com/questions/46616352/how-can-i-update-the-markers-when-moving-the-map
+interface GeolocationListener {
+    void processLocation(HashMap hashmaplocation, DocumentSnapshot hashMapSnapshot);
+}
 /**
  * This class is responsible for displaying the map of qr codes to users
  */
-public class MapActivity extends BaseNavigatableActivity implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
+public class MapActivity extends BaseNavigatableActivity implements GeolocationListener, OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    public static final double oneMileLat = 0.0144927536231884;
-    public static final double oneMileLon = 0.0181818181818182;
     private HashMap<Double, HashMap<Double, HashMap<String, MarkerOptions>>> markers = new HashMap<>();
     private HashMap<MarkerOptions, Double> count = new HashMap<>();
     private GoogleMap map;
@@ -241,14 +242,19 @@ public class MapActivity extends BaseNavigatableActivity implements OnMapReadyCa
         return false;
     }
 
-
+    /**
+     * This is called when the map is still
+     */
     @Override
     public void onCameraIdle() {
-        firestoreQueryNearbyLocations();
+        Geolocation.firestoreQueryNearbyLocations(map.getCameraPosition().target, map.getCameraPosition().zoom, this::processLocation );
         // Now fire a new search with the new latitude and longitude
         // searcher.setQuery(new Query().setAroundLatLng(new AbstractQuery.LatLng(centerLat, centerLng)).setAroundRadius(5000))
     }
 
+    /**
+     * This is used to process locations returned from firestore
+     */
     public  void processLocation(HashMap hashmaplocation, DocumentSnapshot hashMapSnapshot) {
         HashMap hashMapCode = (HashMap) hashMapSnapshot.getData();
         GeoPoint geopoint = (GeoPoint) hashmaplocation.get("location");
@@ -278,74 +284,5 @@ public class MapActivity extends BaseNavigatableActivity implements OnMapReadyCa
             Log.e("MAPERROR", msg);
         }
     }
-    public void firestoreQueryNearbyLocations () {
-        LatLng center = map.getCameraPosition().target;
-        double centerLat = (double)center.latitude;
-        double centerLng = (double)center.longitude;
-        double distance = 100/ map.getCameraPosition().zoom;
 
-        double lowerLat = centerLat - (oneMileLat * distance);
-        double lowerLon = centerLng - (oneMileLon * distance);
-
-        double greaterLat = centerLat + (oneMileLat * distance);
-        double greaterLon = centerLng + (oneMileLon * distance);
-        if(lowerLat < -90) {
-            lowerLat = -90;
-        }
-        if(lowerLon < -180) {
-            lowerLat = -180;
-        }
-        if(greaterLat > 90) {
-            lowerLat = 90;
-        }
-        if(greaterLon > 180) {
-            greaterLon = 180;
-        }
-        GeoPoint lesserGeopoint = new GeoPoint(lowerLat, lowerLon);
-        GeoPoint greaterGeopoint =  new GeoPoint(greaterLat, greaterLon);
-
-        CollectionReference docRef =  db.collection("location");
-
-        docRef.whereGreaterThan("location", lesserGeopoint).whereLessThan("location", greaterGeopoint)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (!task.isSuccessful()) {
-                    return;
-                }
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    HashMap hashmaplocation = (HashMap) document.getData();
-                    DocumentReference referenceToScan = (DocumentReference) hashmaplocation.get("scan");
-                    if(referenceToScan == null) { continue; }
-                    referenceToScan.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (!task.isSuccessful()) {
-                                return;
-                            }
-                            HashMap hashmapScan = (HashMap) task.getResult().getData();
-                            DocumentReference referenceToCode = (DocumentReference) hashmapScan.get("qrcode");
-                            referenceToCode.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (!task.isSuccessful()) {
-                                        return;
-                                    }
-                                    HashMap hashMapCode = (HashMap) task.getResult().getData();
-                                    processLocation(hashmaplocation, task.getResult());
-                                }
-                            });
-                        }
-
-                    });
-
-                }
-            }
-
-        });
-
-    }
 }
