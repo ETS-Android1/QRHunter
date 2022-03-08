@@ -1,27 +1,38 @@
 package com.example.qrhunter;
 
-public class ScoringSystem {
-    Database firebaseDB;
-    public ScoringSystem() {}
+import com.google.firebase.firestore.FirebaseFirestore;
 
-    public Float calculateScore(QRCode qrcode) {
+public class ScoringSystem {
+    FirebaseFirestore firebaseDB;
+    public ScoringSystem() {}
+    // TODO implement more sophisticated scoring system
+    /**
+     * A function that calculates the score from a hash
+     * @param hash
+     * @return the score of the hash
+     */
+    public static Float calculateScore(String hash) {
         Float score = 0f;
-        //TODO
+        for (char el : hash.toCharArray()) {
+            score = score + el;
+        }
         return score;
     }
 
     public QRCode getGlobalHighestScoringQRCode() {
         QRCode highestScoringCode;
         //TODO
-        return highestScoringCode;
+        return new QRCode();
     }
 
     public QRCode getHighestScoringCodeForUser(User u) {
         //TODO
+        return new QRCode();
     }
 
     public QRCode getLowestScoringCodeForUser(User u) {
         //TODO
+        return new QRCode();
     }
 
 }

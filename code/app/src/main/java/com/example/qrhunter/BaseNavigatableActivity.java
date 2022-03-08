@@ -34,7 +34,7 @@ public abstract class BaseNavigatableActivity extends AppCompatActivity {
                 Intent intent = new Intent(BaseNavigatableActivity.this, MapActivity.class);
                 startActivity(intent);
             } else if (item.getItemId() == R.id.camera) {
-                Intent intent = new Intent(BaseNavigatableActivity.this, MainActivity.class);
+                Intent intent = new Intent(BaseNavigatableActivity.this, QRScanActivity.class);
                 startActivity(intent);
             } else if (item.getItemId() == R.id.qrcode) {
                 Intent intent = new Intent(BaseNavigatableActivity.this, ListCodesActivity.class);
