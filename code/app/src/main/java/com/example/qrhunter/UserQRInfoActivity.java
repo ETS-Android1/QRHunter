@@ -68,16 +68,18 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
             public void onClick(View view) {
                 String commentData = addComment.getText().toString();
                 String user = "test1";
+                String uniqueQR = DigestUtils.sha256Hex(result.toString());
                 HashMap<String, String> comment = new HashMap<>();
                 if (commentData != "") {
                     commentDataList.add(new Comment(user, commentData));
                     comment.put("Comment Data", commentData);
+                    comment.put("User", user);
 
                     commentAdapter.notifyDataSetChanged();
                     addComment.setText("");
                 }
                 collectionReference
-                        .document(user)
+                        .document(uniqueQR)
                         .set(comment)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
