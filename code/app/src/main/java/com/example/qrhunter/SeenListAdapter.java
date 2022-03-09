@@ -33,7 +33,7 @@ public class SeenListAdapter extends ArrayAdapter<User> {
         User user = users.get(position);
         TextView seenUserName = view.findViewById(R.id.seenUser);
 
-        seenUserName.setText(user.getUserName());
+        seenUserName.setText(user.getUsername());
         return view;
     }
 }

@@ -62,9 +62,9 @@ public class QRCode {
                         data.put("scans", new ArrayList<DocumentReference>());
                         if (!d.exists()) {
                             qrCodeRef.set(data).addOnSuccessListener(
-                                    (OnSuccessListener) -> {
-                                        listener.onQrUpload(qrCodeRef);
-                                    }
+                                (OnSuccessListener) -> {
+                                    listener.onQrUpload(qrCodeRef);
+                                }
                             ).addOnFailureListener((OnFailureListener) e -> {
                                 listener.onQrUploadFail();
                             });

@@ -90,9 +90,8 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                 commentDataList.clear();
                 for(QueryDocumentSnapshot doc: value)
                 {
-                    Log.d(TAG, String.valueOf(doc.getData().get("Comment Data")));
-                    String user = doc.getId();
-                    String commentData = (String) doc.getData().get("Comment Data");
+                    String user = (String) doc.getData().get("User");
+                    String commentData = (String) doc.getData().get("Comment_Data");
                     commentDataList.add(new Comment(user, commentData)); // Adding the users and comments from FireStore
                 }
                 commentAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
