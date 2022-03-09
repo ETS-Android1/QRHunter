@@ -7,6 +7,7 @@ public class OtherQRCodes {
     private Date date;
     private int numScanners;
     private int points;
+    //private QRCode code;
 
     public OtherQRCodes(String location, Date date, int numScanners, int points) {
         this.location = location;
