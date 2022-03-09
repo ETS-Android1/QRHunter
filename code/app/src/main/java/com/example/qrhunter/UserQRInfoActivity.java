@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.digest.DigestUtils;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -68,7 +69,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
             public void onClick(View view) {
                 String commentData = addComment.getText().toString();
                 String user = "test1";
-                String uniqueQR = DigestUtils.sha256Hex(result.toString());
+                String uniqueQR = "fnefnioerfnoiFEFSEFfesfs";
                 HashMap<String, String> comment = new HashMap<>();
                 if (commentData != "") {
                     commentDataList.add(new Comment(user, commentData));
@@ -78,24 +79,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                     commentAdapter.notifyDataSetChanged();
                     addComment.setText("");
                 }
-                collectionReference
-                        .document(uniqueQR)
-                        .set(comment)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                            // These are a method which gets executed when the task is succeeded
-
-                                Log.d(TAG, "Comment has been added successfully!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // These are a method which gets executed if there’s any problem
-                                Log.d(TAG, "Data could not be added!" + e.toString());
-                            }
-                        });
+                collectionReference.document(uniqueQR).set(comment);
             }
         });
 
