@@ -32,7 +32,7 @@ public class Scan {
         data.put("createdAt", tsLong);
         data.put("user",  user);
         data.put("qrCode", qrCode);
-        qrCode.update("scans", FieldValue.arrayUnion(qrCode));
+        qrCode.update("scans", FieldValue.arrayUnion(scan));
         if( location != null) {
             data.put("location", location);
         }
