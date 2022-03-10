@@ -8,4 +8,7 @@
     <string name="profile">profile</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="MESSAGE_ON_FAIL">Sorry, your qr code could not be processed</string>
+    <string name="MESSAGE_ON_UPLOAD">Your qr code has been recorded</string>
+    <string name="MESSAGE_ON_SCAN">Your scan is being processed</string>
 </resources>

@@ -24,6 +24,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.digest.DigestUtils;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -54,6 +56,9 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
     private DocumentReference user;
     private  LatLng currentLocation = null;
     private static final String myUserName = "odawg";
+    Snackbar onUpload;
+    Snackbar onComplete;
+    Snackbar onFail;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 50;
 
     @Override
@@ -81,6 +86,9 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
             else {
                 setup();
             }
+            onUpload = Snackbar.make(findViewById(R.id.bottom_nav), R.string.MESSAGE_ON_SCAN, BaseTransientBottomBar.LENGTH_LONG);
+            onComplete = Snackbar.make(findViewById(R.id.bottom_nav), R.string.MESSAGE_ON_UPLOAD, BaseTransientBottomBar.LENGTH_LONG);
+            onFail = Snackbar.make(findViewById(R.id.bottom_nav), R.string.MESSAGE_ON_FAIL, BaseTransientBottomBar.LENGTH_LONG);
         } catch(Exception e) {
             String msg=  e.getMessage();
             Log.e("ERROR IN QRSCANE", msg);
@@ -120,6 +128,7 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
                         String res = result.toString();
                         LatLng location = null;
                         Toast.makeText(QRScanActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        onUpload.show();
                         QRCode.uploadQRCode(user, sha256hex, QRScanActivity.this, db);
                     }
                 });
@@ -167,13 +176,16 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
     public void onQrUploadFail() {
         String msg = "BLOUE";
         Log.e("ERROR", "BIGERROR");
+        onUpload.dismiss();
+        onFail.show();
     }
 
     /**
      * called on a successful scan upload
      */
     private void onSuccessfulUpload() {
-
+        onUpload.dismiss();
+        onComplete.show();
     }
 
     @Override
@@ -193,6 +205,8 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
                         });
                     } else {
                         //TODO on scan upload fail
+                        onUpload.dismiss();
+                        onFail.show();
                         String msg = "BLOUE";
                     }
                 }
@@ -205,6 +219,8 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
                         QRScanActivity.this.onSuccessfulUpload();
                     } else {
                         //TODO on scan upload fail
+                        onUpload.dismiss();
+                        onFail.show();
                         String msg = "BLOUE";
                     }
                 }
