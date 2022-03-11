@@ -1,6 +1,7 @@
 package com.example.qrhunter;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,50 +29,66 @@ public class QRCode {
     Float score;
     String uniqueHash;
     ArrayList<Scan> scans;
+    private DocumentReference qrCodeRef;
+    private  DocumentReference player;
+    @Nullable
+    ListensToQrUpload listener;
 
-
-    public QRCode() {
-        //TODO
+    /**
+     * used to get the document reference
+     */
+    public DocumentReference getQrCodeRef() {
+        return qrCodeRef;
     }
 
     /**
      * This is called when a qrcode is scanned and decoded
      * @param player
      * the logged in user the qrcode should be associated with
-     * @param hash
+     * @param uniqueHash
      * the hash of the decoded qrcode
      * @param listener
      * an interface which implements upload and upload fail functions
-     * @param db
-     * access to the database
+     * @param qrCodeRef
+     * a reference to the qr code that will be uploaded
      */
-    public static void uploadQRCode(DocumentReference player, String hash, ListensToQrUpload listener, FirebaseFirestore db) {
-        CollectionReference c = db.collection("qrcodes");
-        DocumentReference qrCodeRef = db.collection("qrcodes")
-                .document(hash);
-        qrCodeRef.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot d = task.getResult();
-                        Map<String, Object> data = new HashMap<>();
-                        Long tsLong = System.currentTimeMillis()/1000;
-                        data.put("score", ScoringSystem.calculateScore(hash));
-                        data.put("timeCreated", tsLong);
-                        data.put("createdBy", player);
-                        data.put("scans", new ArrayList<DocumentReference>());
-                        if (!d.exists()) {
-                            qrCodeRef.set(data).addOnSuccessListener(
-                                (OnSuccessListener) -> {
-                                    listener.onQrUpload(qrCodeRef);
-                                }
-                            ).addOnFailureListener((OnFailureListener) e -> {
-                                listener.onQrUploadFail();
-                            });
-                        } else {
+    public QRCode(DocumentReference qrCodeRef, String uniqueHash, DocumentReference player, @Nullable ListensToQrUpload listener) {
+        this.qrCodeRef = qrCodeRef;
+        this.player = player;
+        this.listener = listener;
+        this.uniqueHash = uniqueHash;
+        this.score = ScoringSystem.calculateScore(uniqueHash);
+    }
+    public OnCompleteListener<DocumentSnapshot> onCompleteListener = new OnCompleteListener<DocumentSnapshot>() {
+        @Override
+        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            DocumentSnapshot d = task.getResult();
+            Map<String, Object> data = new HashMap<>();
+            Long tsLong = System.currentTimeMillis()/1000;
+            data.put("score", ScoringSystem.calculateScore(uniqueHash));
+            data.put("timeCreated", tsLong);
+            data.put("createdBy", player);
+            data.put("scans", new ArrayList<DocumentReference>());
+            if (!d.exists()) {
+                qrCodeRef.set(data).addOnSuccessListener(
+                        (OnSuccessListener) -> {
                             listener.onQrUpload(qrCodeRef);
                         }
-                    }
+                ).addOnFailureListener((OnFailureListener) e -> {
+                    listener.onQrUploadFail();
                 });
+            } else {
+                listener.onQrUpload(qrCodeRef);
+            }
+        }
+    };
+
+    public QRCode() {
+        //TODO
+    }
+
+    public void uploadQRCode() {
+        qrCodeRef.get()
+                .addOnCompleteListener(onCompleteListener);
     }
 }

@@ -129,7 +129,8 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
                         LatLng location = null;
                         Toast.makeText(QRScanActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
                         onUpload.show();
-                        QRCode.uploadQRCode(user, sha256hex, QRScanActivity.this, db);
+                        QRCode myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, user, QRScanActivity.this);
+                        myCode.uploadQRCode();
                     }
                 });
             }
@@ -174,7 +175,6 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
 
     @Override
     public void onQrUploadFail() {
-        String msg = "BLOUE";
         Log.e("ERROR", "BIGERROR");
         onUpload.dismiss();
         onFail.show();
@@ -207,7 +207,6 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
                         //TODO on scan upload fail
                         onUpload.dismiss();
                         onFail.show();
-                        String msg = "BLOUE";
                     }
                 }
             });
@@ -221,7 +220,6 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
                         //TODO on scan upload fail
                         onUpload.dismiss();
                         onFail.show();
-                        String msg = "BLOUE";
                     }
                 }
             });
