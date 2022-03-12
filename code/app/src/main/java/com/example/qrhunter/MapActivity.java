@@ -262,7 +262,7 @@ public class MapActivity extends BaseNavigatableActivity implements GeolocationL
             if (markers.get(geopoint.getLatitude()) != null && markers.get(geopoint).get(geopoint.getLongitude()) != null
                     && markers.get(geopoint).get(geopoint.getLongitude()).get(hashMapSnapshot.getId()) != null) {
                 MarkerOptions options = markers.get(geopoint.getLatitude()).get(geopoint.getLongitude()).get(hashMapSnapshot.getId());
-
+                // SAME LOCATION, SAME QRCODE
                 options.snippet("Count: " + (count.get(options) + 1) + " Score: " + hashMapCode.get("score"));
                 count.put(options, count.get(options) + 1);
             }
