@@ -36,7 +36,7 @@ public class TestQRcode {
             data.put("scans",new ArrayList<DocumentReference>());
     }
     ListensToQrUpload l = Mockito.mock(ListensToQrUpload.class);
-    private QRCode myQrCode = new QRCode(mockReference, testHash, userReference, l );
+    private QRCode myQrCode = new QRCode(mockReference, testHash,null, userReference, l );
     /**
      * @test tests the qr code is searched for before proceeding with an upload
      */
