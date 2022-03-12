@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Scan {
-    DateTime time;
-    Geolocation place;
-    ImageFile imageFile;
+    private DateTime time;
+    private Geolocation place;
+    private ImageFile imageFile;
 
     public Scan() {}
 

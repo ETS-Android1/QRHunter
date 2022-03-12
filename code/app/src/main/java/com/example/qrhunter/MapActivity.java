@@ -61,8 +61,8 @@ public class MapActivity extends BaseNavigatableActivity implements GeolocationL
     private HashMap<Double, HashMap<Double, HashMap<String, MarkerOptions>>> markers = new HashMap<>();
     private HashMap<MarkerOptions, Double> count = new HashMap<>();
     private GoogleMap map;
-    LinearLayout infoLayout;
-    FirebaseFirestore db;
+    private LinearLayout infoLayout;
+    private FirebaseFirestore db;
     private FusedLocationProviderClient fusedLocationClient;
 
 

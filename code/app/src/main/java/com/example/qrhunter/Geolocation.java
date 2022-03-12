@@ -18,14 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Geolocation {
-    Float latitude;
-    Float longitude;
-    ArrayList<Float> coordinate = new ArrayList<Float>();
+    private Float latitude;
+    private Float longitude;
     public static final double oneMileLat = 0.0144927536231884;
     public static final double oneMileLon = 0.0181818181818182;
     public Geolocation(Float latitude, Float longitude) {
-        coordinate.add(latitude);
-        coordinate.add(longitude);
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     /**

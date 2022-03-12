@@ -50,15 +50,14 @@ interface ListensToQrUpload {
 
 public class QRScanActivity extends BaseNavigatableActivity implements  ListensToQrUpload {
     // TO DO REPLACE WITH Real username
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
     private FusedLocationProviderClient fusedLocationClient;
     // TODO fix with logged in user
     private DocumentReference user;
     private  LatLng currentLocation = null;
-    private static final String myUserName = "odawg";
-    Snackbar onUpload;
-    Snackbar onComplete;
-    Snackbar onFail;
+    private Snackbar onUpload;
+    private Snackbar onComplete;
+    private Snackbar onFail;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 50;
 
     @Override

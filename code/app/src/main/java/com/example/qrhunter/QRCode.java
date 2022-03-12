@@ -103,7 +103,9 @@ public class QRCode {
     public QRCode() {
         //TODO
     }
-
+    /**
+     * Called to upload a qrcode to firebase
+     */
     public void uploadQRCode() {
         qrCodeRef.get()
                 .addOnCompleteListener(onCompleteListener);
