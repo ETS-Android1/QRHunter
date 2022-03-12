@@ -12,11 +12,11 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class SeenListAdapter extends ArrayAdapter<Profile> {
-    ArrayList<Profile> users;
+public class SeenListAdapter extends ArrayAdapter<User> {
+    ArrayList<User> users;
     Context context;
 
-    public SeenListAdapter(Context context, ArrayList<Profile> users) {
+    public SeenListAdapter(Context context, ArrayList<User> users) {
         super(context, 0, users);
         this.users = users;
         this.context = context;
@@ -30,10 +30,10 @@ public class SeenListAdapter extends ArrayAdapter<Profile> {
             view = LayoutInflater.from(context).inflate(R.layout.seen_content, parent, false);
         }
 
-        Profile user = users.get(position);
+        User user = users.get(position);
         TextView seenUserName = view.findViewById(R.id.seenUser);
 
-        seenUserName.setText(user.getUserName());
+        seenUserName.setText(user.getUsername());
         return view;
     }
 }

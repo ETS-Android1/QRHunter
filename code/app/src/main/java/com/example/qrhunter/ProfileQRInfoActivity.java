@@ -14,8 +14,8 @@ import java.util.ArrayList;
 
 public class ProfileQRInfoActivity extends BaseNavigatableActivity {
     ListView seenList;
-    ArrayList<Profile> seenDataList;
-    ArrayAdapter<Profile> seenAdapter;
+    ArrayList<User> seenDataList;
+    ArrayAdapter<User> seenAdapter;
     ImageButton back;
 
     @Override
@@ -36,8 +36,6 @@ public class ProfileQRInfoActivity extends BaseNavigatableActivity {
         seenList = findViewById(R.id.seenList);
         seenDataList = new ArrayList<>();
 
-        seenDataList.add(new Profile("user1"));
-        seenDataList.add(new Profile("user3"));
 
         back = findViewById(R.id.backProfile);
 

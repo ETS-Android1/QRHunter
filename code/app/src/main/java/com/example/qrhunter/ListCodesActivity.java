@@ -58,6 +58,7 @@ public class ListCodesActivity extends BaseNavigatableActivity implements Adapte
         //use this to get info of the clicked item
         // adapterView.getItemAtPosition(i);
         Intent intent = new Intent(ListCodesActivity.this, UserQRInfoActivity.class);
+
         startActivity(intent);
     }
 }
