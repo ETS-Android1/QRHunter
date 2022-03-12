@@ -11,8 +11,8 @@ public class ScoringSystem {
      * @param hash
      * @return the score of the hash
      */
-    public static Float calculateScore(String hash) {
-        Float score = 0f;
+    public static Double calculateScore(String hash) {
+        Double score = 0.0;
         for (char el : hash.toCharArray()) {
             score = score + el;
         }

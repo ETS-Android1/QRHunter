@@ -129,7 +129,8 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
                         LatLng location = null;
                         Toast.makeText(QRScanActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
                         onUpload.show();
-                        QRCode myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, user, QRScanActivity.this);
+                        QRCode myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, null, user, QRScanActivity.this);
+                        //QRCode myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, user, QRScanActivity.this);
                         myCode.uploadQRCode();
                     }
                 });

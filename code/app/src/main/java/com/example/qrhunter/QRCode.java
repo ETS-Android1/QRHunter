@@ -26,9 +26,9 @@ import java.util.Map;
  * this class represents the qrcodes that are scanned
  */
 public class QRCode {
-    Float score;
+    Double score;
     String uniqueHash;
-    ArrayList<Scan> scans;
+    ArrayList<DocumentReference> scans = new ArrayList<>();
     private DocumentReference qrCodeRef;
     private  DocumentReference player;
     @Nullable
@@ -52,13 +52,30 @@ public class QRCode {
      * @param qrCodeRef
      * a reference to the qr code that will be uploaded
      */
-    public QRCode(DocumentReference qrCodeRef, String uniqueHash, DocumentReference player, @Nullable ListensToQrUpload listener) {
+    public QRCode(DocumentReference qrCodeRef, String uniqueHash, @Nullable ArrayList<DocumentReference> scans,DocumentReference player, @Nullable ListensToQrUpload listener) {
         this.qrCodeRef = qrCodeRef;
         this.player = player;
         this.listener = listener;
         this.uniqueHash = uniqueHash;
         this.score = ScoringSystem.calculateScore(uniqueHash);
+        this.scans = scans;
     }
+    public int getNumScans() {
+        return scans.size();
+    }
+    public String getUniqueHash() {
+        return uniqueHash;
+    }
+
+    public DocumentReference getPlayer() {
+                return player;
+        }
+
+    public Double getScore() {
+        return score;
+    }
+
+
     public OnCompleteListener<DocumentSnapshot> onCompleteListener = new OnCompleteListener<DocumentSnapshot>() {
         @Override
         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
