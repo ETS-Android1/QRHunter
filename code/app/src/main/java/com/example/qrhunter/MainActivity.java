@@ -29,10 +29,28 @@ import android.widget.Button;
 public class MainActivity extends BaseNavigatableActivity {
     Button userQRInfo;
     Button profileQRInfo;
-
+    Button leader;
+    Button playerProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        leader = findViewById(R.id.leaderBoardTest);
+        leader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), LeaderBoard.class));
+
+            }
+        });
+        playerProfile = findViewById(R.id.playerProfileButton);
+        playerProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), PlayerProfile.class));
+
+            }
+        });
+
     }
     /**
      * This is called by the base activity to get the layout
@@ -43,7 +61,6 @@ public class MainActivity extends BaseNavigatableActivity {
         return R.layout.activity_main;
     }
 
-
     /**
      * This is called by the base activity to get the selected item on create
      * @return returns item id corresponding to the activity
@@ -52,5 +69,6 @@ public class MainActivity extends BaseNavigatableActivity {
     protected int getSelectedItemId() {
         return R.id.camera;
     }
+
 
 }

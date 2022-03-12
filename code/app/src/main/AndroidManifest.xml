@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QRHunter">
         <activity
+            android:name=".LeaderBoard"
+            android:exported="false" />
+        <activity
             android:name=".BaseNavigatableActivity"
             android:exported="false" />
 
@@ -23,15 +26,18 @@
         <activity
             android:name=".MapActivity"
             android:exported="false" />
-        <activity  
+        <activity
             android:name=".ProfileQRInfoActivity"
             android:exported="false" />
         <activity
             android:name=".UserQRInfoActivity"
             android:exported="false" />
-        <activity 
+        <activity
             android:name=".Login_Signup_Activity"
             android:exported="false" />
+        <activity
+            android:name=".PlayerProfile"
+            android:exported="true"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <Button
@@ -12,7 +13,31 @@
         android:layout_height="wrap_content"
         android:text="user qr info">
     </Button>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test LeaderB"
+        android:id="@+id/leaderBoardTest">
 
+    </Button>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Player Profile"
+            android:id="@+id/playerProfileButton">
+
+        </Button>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
