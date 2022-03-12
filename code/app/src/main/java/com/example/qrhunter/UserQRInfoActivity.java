@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.digest.DigestUtils;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -68,32 +69,17 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
             public void onClick(View view) {
                 String commentData = addComment.getText().toString();
                 String user = "test1";
+                String uniqueQR = "fnefnioerfnoiFEFSEFfesfs";
                 HashMap<String, String> comment = new HashMap<>();
                 if (commentData != "") {
                     commentDataList.add(new Comment(user, commentData));
                     comment.put("Comment Data", commentData);
+                    comment.put("User", user);
 
                     commentAdapter.notifyDataSetChanged();
                     addComment.setText("");
                 }
-                collectionReference
-                        .document(user)
-                        .set(comment)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                            // These are a method which gets executed when the task is succeeded
-
-                                Log.d(TAG, "Comment has been added successfully!");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // These are a method which gets executed if there’s any problem
-                                Log.d(TAG, "Data could not be added!" + e.toString());
-                            }
-                        });
+                collectionReference.document(uniqueQR).set(comment);
             }
         });
 
@@ -104,9 +90,8 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                 commentDataList.clear();
                 for(QueryDocumentSnapshot doc: value)
                 {
-                    Log.d(TAG, String.valueOf(doc.getData().get("Comment Data")));
-                    String user = doc.getId();
-                    String commentData = (String) doc.getData().get("Comment Data");
+                    String user = (String) doc.getData().get("User");
+                    String commentData = (String) doc.getData().get("Comment_Data");
                     commentDataList.add(new Comment(user, commentData)); // Adding the users and comments from FireStore
                 }
                 commentAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud

@@ -16,6 +16,10 @@ public class User {
         this.uniqueQRCode = uniqueQRCode;
     }
 
+    public String getUsername() {
+        return this.username;
+    }
+
     public boolean addQRCode(QRCode qrcode) {
         if (scannedQRCodes.add(qrcode)) return true;
         else return false;
