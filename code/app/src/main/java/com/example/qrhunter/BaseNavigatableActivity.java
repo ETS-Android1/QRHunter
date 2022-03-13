@@ -40,7 +40,7 @@ public abstract class BaseNavigatableActivity extends AppCompatActivity {
                 Intent intent = new Intent(BaseNavigatableActivity.this, ListCodesActivity.class);
                 startActivity(intent);
             }else if (item.getItemId() == R.id.profile) {
-                Intent intent = new Intent(BaseNavigatableActivity.this, LoggedinProfile.class);
+                Intent intent = new Intent(BaseNavigatableActivity.this, PlayerProfile.class);
                 startActivity(intent);
             }
             return true;
