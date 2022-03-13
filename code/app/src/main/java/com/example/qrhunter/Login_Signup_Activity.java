@@ -6,7 +6,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,8 +31,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 import com.google.zxing.Result;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +46,7 @@ public class Login_Signup_Activity extends AppCompatActivity {
     FirebaseFirestore db;
     boolean usernameExists;
     private static final String TAG = "DocSnippets";
+    private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +93,11 @@ public class Login_Signup_Activity extends AppCompatActivity {
                                     String actualPass = document.get("password").toString();
                                     if (actualPass.equals(inpPass)) {
                                         //login
-//                                    txtInputPasswordLogin.setError("Logged in!");
+                                        saveData(inpUsername);
+//                                        String loadedName = loadData();
+//                                        Toast.makeText(Login_Signup_Activity.this, "USER: " + loadedName, Toast.LENGTH_LONG).show();
                                         Intent intent = new Intent(Login_Signup_Activity.this, QRScanActivity.class);
-                                        intent.putExtra("USERNAME", inpUsername);
+//                                        intent.putExtra("USERNAME", inpUsername);
                                         startActivity(intent);
                                     } else {  // if input password does not match with username's password
                                         txtInputPasswordLogin.setError("Wrong username and/or password");
@@ -125,6 +132,21 @@ public class Login_Signup_Activity extends AppCompatActivity {
         });
 
     }
+
+    // saves data from allSessions to sharedPrefs
+    public void saveData(String username) {
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("USERNAME-key", username);
+        editor.apply();
+    }
+
+    // loads data from sharePrefs to allSessions
+    public String loadData() {
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        return sharedPref.getString("USERNAME-key", "default-empty-string");
+    }
+
 
 
 

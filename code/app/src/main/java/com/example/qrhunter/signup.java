@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -28,6 +30,7 @@ public class signup extends AppCompatActivity {
     private TextInputLayout txtInputUsername, txtInputPass, txtInputConfirmPass, txtInputEmail, txtInputPhone;
     private Button btnConfirm, btnCancel;
     FirebaseFirestore db;
+    private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,7 @@ public class signup extends AppCompatActivity {
                                     txtInputUsername.setErrorEnabled(false);
                                     if (validPass && validPassConf && validEmail && validPhone) {
                                         User u = new User(username, pass, email, phone);
+                                        saveData(username);
                                         registerNewUser(u, cr);
                                         Log.d(TAG, "No such document");
                                     }
@@ -107,6 +111,15 @@ public class signup extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    // saves data from allSessions to sharedPrefs
+    public void saveData(String username) {
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("USERNAME-key", username);
+        editor.apply();
     }
 
     public void registerNewUser(User u, CollectionReference cr) {
@@ -129,6 +142,11 @@ public class signup extends AppCompatActivity {
                 Intent intent = new Intent(signup.this, QRScanActivity.class);
                 intent.putExtra("USERNAME", u.getUsername());
                 startActivity(intent);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(signup.this, "ERROR: " + e.toString(), Toast.LENGTH_LONG).show();
             }
         });
     }
