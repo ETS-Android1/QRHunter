@@ -16,6 +16,7 @@
         android:theme="@style/Theme.QRHunter">
         <activity
             android:name=".QRScanActivity"
+            android:name=".LeaderBoard"
             android:exported="false" />
         <activity
             android:name=".BaseNavigatableActivity"
@@ -43,6 +44,9 @@
         <activity
             android:name=".ListCodesActivity"
             android:exported="false" />
+        <activity
+            android:name=".PlayerProfile"
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
