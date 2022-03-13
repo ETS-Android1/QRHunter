@@ -133,18 +133,15 @@ public class Login_Signup_Activity extends AppCompatActivity {
 
     }
 
-    // saves data from allSessions to sharedPrefs
+    /**
+     * Saves the logged in username to local storage for other activities to access
+     * @param username
+     */
     public void saveData(String username) {
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("USERNAME-key", username);
         editor.apply();
-    }
-
-    // loads data from sharePrefs to allSessions
-    public String loadData() {
-        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        return sharedPref.getString("USERNAME-key", "default-empty-string");
     }
 
 

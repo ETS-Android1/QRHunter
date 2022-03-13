@@ -114,7 +114,10 @@ public class signup extends AppCompatActivity {
     }
 
 
-    // saves data from allSessions to sharedPrefs
+    /**
+     * Saves the logged in username to local storage for other activities to access
+     * @param username
+     */
     public void saveData(String username) {
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -122,6 +125,12 @@ public class signup extends AppCompatActivity {
         editor.apply();
     }
 
+    /**
+     * Registers a new user to Firebase/Users/username
+     * And moves to QRScanActivity if successful
+     * @param u
+     * @param cr
+     */
     public void registerNewUser(User u, CollectionReference cr) {
 
         Map<String, Object> newUserMap = new HashMap<>();
