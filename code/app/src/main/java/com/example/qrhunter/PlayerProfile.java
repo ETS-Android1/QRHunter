@@ -60,11 +60,11 @@ public class PlayerProfile extends BaseNavigatableActivity {
                 assert value != null;
                 Map<String, Object> data = value.getData();
                 codes = (ArrayList<String>) data.get("codes");
-                ProfileName.setText(data.get("username").toString());
-                Total.setText(data.get("worth").toString());
-                Highest.setText(data.get("highest").toString());
-                Lowest.setText(data.get("lowest").toString());
-                Scanned.setText("" + codes.size());
+                ProfileName.setText("username: "+data.get("username").toString());
+                Total.setText("total: "+data.get("worth").toString());
+                Highest.setText("highest: "+data.get("highest").toString());
+                Lowest.setText("lowest: "+data.get("lowest").toString());
+                Scanned.setText("scanned: " + codes.size());
                 initRecycleView();
 
             }
