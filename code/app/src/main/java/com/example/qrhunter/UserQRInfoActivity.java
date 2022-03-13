@@ -1,3 +1,5 @@
+// This activity will display information about a given qr code that a player has scanned as well as comments
+
 package com.example.qrhunter;
 
 import androidx.annotation.NonNull;
@@ -27,22 +29,28 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class is responsible for displaying QR information from a selected user QR code
+ */
 public class UserQRInfoActivity extends BaseNavigatableActivity {
-    ListView commentList;
-    ArrayList<Comment> commentDataList;
-    ArrayAdapter<Comment> commentAdapter;
-    ImageButton back;
-    Button delete;
-    EditText addComment;
-    ImageButton sendComment;
-    FirebaseFirestore db;
+    private ListView commentList;
+    private ArrayList<Comment> commentDataList;
+    private ArrayAdapter<Comment> commentAdapter;
+    private FirebaseFirestore db;
 
-
+    /**
+     * This is called by the base activity to get the layout
+     * @return returns the layout for this activity
+     */
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_user_qrinfo;
     }
 
+    /**
+     * This is called by the base activity to get the selected item on create
+     * @return returns item id corresponding to the activity
+     */
     @Override
     protected int getSelectedItemId() {
         return R.id.profile;
@@ -54,7 +62,14 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
 
         commentList = findViewById(R.id.commentList);
         commentDataList = new ArrayList<>();
+        ImageButton back;
+        Button delete;
+        EditText addComment;
+        ImageButton sendComment;
 
+        /* from eclass
+        at https://github.com/AbdulAli/FirestoreTutorialW22/
+        by https://eclass.srv.ualberta.ca/mod/page/view.php?id=5825425 */
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("comments");
         final String TAG = "UserQRInfoActivity";
@@ -65,8 +80,14 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         sendComment = findViewById(R.id.sendComment);
 
         sendComment.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Allows a comment to be added to the database and the user qr code comments
+             *
+             * @param view The view used
+             */
             @Override
             public void onClick(View view) {
+                // we add to the database based on the user passed from the previous activity
                 String commentData = addComment.getText().toString();
                 String user = "test1";
                 String uniqueQR = "fnefnioerfnoiFEFSEFfesfs";
@@ -85,20 +106,32 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
 
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
+            /**
+             * This sets the new centre of the map to the selected place
+             *
+             * @param value used for querying database
+             * @param error exception for error functionality
+             */
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 // Clear the old list
                 commentDataList.clear();
+                // add each of the comments to the commentData list from the database
                 for(QueryDocumentSnapshot doc: value)
                 {
                     String user = (String) doc.getData().get("User");
-                    String commentData = (String) doc.getData().get("Comment_Data");
-                    commentDataList.add(new Comment(user, commentData)); // Adding the users and comments from FireStore
+                    String commentData = (String) doc.getData().get("Comment Data");
+                    commentDataList.add(new Comment(user, commentData));
                 }
                 commentAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
             }
         });
 
         back.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Allows the user to return back to the previous activity(qr code list)
+             *
+             * @param view the view used
+             */
             @Override
             public void onClick(View view) {
                 finish();
