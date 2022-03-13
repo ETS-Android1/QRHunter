@@ -1,3 +1,5 @@
+// This activity is used to show who has seen a qr code
+
 package com.example.qrhunter;
 
 import androidx.appcompat.app.AppCompatActivity;

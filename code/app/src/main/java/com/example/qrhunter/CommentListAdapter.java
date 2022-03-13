@@ -1,3 +1,5 @@
+// A custom list adapter used for displaying comments
+
 package com.example.qrhunter;
 
 import android.content.Context;

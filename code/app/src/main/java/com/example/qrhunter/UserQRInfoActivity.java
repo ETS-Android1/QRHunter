@@ -1,3 +1,5 @@
+// This activity will display information about a given qr code that a player has scanned as well as comments
+
 package com.example.qrhunter;
 
 import androidx.annotation.NonNull;

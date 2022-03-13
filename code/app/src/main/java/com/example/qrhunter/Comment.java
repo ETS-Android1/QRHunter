@@ -1,3 +1,5 @@
+// A comment representation which will be used for showing comments and their user
+
 package com.example.qrhunter;
 
 /**
