@@ -4,26 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Signup_Fragment">
+    tools:context=".signup">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200px"
         android:id="@+id/txtInputUsername">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/edtTextInputUsername"
-        android:hint="Username"
-        android:inputType="text"
-        android:maxLength="40"/>
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edtTextInputUsername"
+            android:hint="Username"
+            android:inputType="text"
+            android:maxLength="40"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200px"
         android:id="@+id/txtInputPassword">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -38,7 +38,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200px"
         android:id="@+id/txtInputPasswordConfirm">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -53,7 +53,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200px"
         android:id="@+id/txtInputEmail">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -68,7 +68,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200px"
         android:id="@+id/txtInputPhone">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -81,6 +81,24 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCancel"
+            android:text="Cancel"
+            android:layout_marginHorizontal="70dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnConfirm"
+            android:text="Confirm"/>
+
+    </LinearLayout>
 
 </LinearLayout>

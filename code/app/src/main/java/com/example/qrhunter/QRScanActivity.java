@@ -6,6 +6,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -59,6 +61,8 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
     private Snackbar onComplete;
     private Snackbar onFail;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 50;
+    private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
+    private String USERNAME;
 
     @Override
     protected int getLayoutResourceId() {
@@ -77,8 +81,10 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
         try {
             super.onCreate(savedInstanceState);
             db = FirebaseFirestore.getInstance();
+            USERNAME = loadData();
             // TODO Replace with logged in user
-            user = db.collection("User").document("zJDWDHbGJkpMQdqE5zs2");
+            Toast.makeText(QRScanActivity.this, "Welcome user: " + USERNAME, Toast.LENGTH_LONG).show();
+            user = db.collection("User").document(USERNAME);
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                 //ask for authorisation
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
@@ -109,6 +115,16 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
             }
 
     }
+
+    /**
+     * loads USERNAME from SharedPreferences
+     * @return username used to login
+     */
+    public String loadData() {
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        return sharedPref.getString("USERNAME-key", "default-empty-string");
+    }
+
 
     /**
      * sets up the qrcode scanner
@@ -172,6 +188,7 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
         if(mCodeScanner != null) mCodeScanner.releaseResources();
         super.onPause();
     }
+
 
     @Override
     public void onQrUploadFail() {
