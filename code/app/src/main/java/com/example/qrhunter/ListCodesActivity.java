@@ -32,7 +32,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//Refrences: https://www.youtube.com/watch?v=NhiUTjm2BrE
+
+/**
+ * This Activity Shows a list of QR Codes fetched from firebase for the player to scroll
+ * Refrences: https://www.youtube.com/watch?v=NhiUTjm2BrE
+ */
 public class ListCodesActivity extends BaseNavigatableActivity implements AdapterView.OnItemClickListener {
 
     ListView QRCode;
@@ -61,8 +65,9 @@ public class ListCodesActivity extends BaseNavigatableActivity implements Adapte
         //final CollectionReference collectionReference = db.collection("Score");
         QRCode = findViewById(R.id.qr_list);
 
-
-        //Backend firestore
+        /**
+        *  This method does the backend firestore Mapping
+         */
         db.collection("qrcodes").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -86,6 +91,13 @@ public class ListCodesActivity extends BaseNavigatableActivity implements Adapte
         QRCode.setOnItemClickListener(this);
     }
 
+    /**
+     * Use this method to get info of the clicked item
+     * @param adapterView
+     * @param view
+     * @param i
+     * @param l
+     */
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         //use this to get info of the clicked item
