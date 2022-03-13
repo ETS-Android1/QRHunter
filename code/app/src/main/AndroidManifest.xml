@@ -27,6 +27,9 @@
             android:name=".QRScanActivity"
             android:exported="false" />
         <activity
+            android:name=".LeaderBoard"
+            android:exported="false" />
+        <activity
             android:name=".BaseNavigatableActivity"
             android:exported="false" />
 
@@ -45,6 +48,9 @@
             android:exported="false" />
         <activity
             android:name=".Login_Signup_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".LoggedinProfile"
             android:exported="false" />
         <activity
             android:name=".ListCodesActivity"
