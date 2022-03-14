@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+/**
+ * this adapter is for showing the player profile
+ */
 public class PlayerProfileAdapter extends RecyclerView.Adapter<PlayerProfileAdapter.ViewHolder> {
     private ArrayList<String> codes = new ArrayList<>();
     private final Context pcontext;

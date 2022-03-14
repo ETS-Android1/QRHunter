@@ -18,16 +18,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
-public class LeaderBoard extends AppCompatActivity {
+public class LeaderBoard extends BaseNavigatableActivity {
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private ArrayList<LeaderBoardHolder> leaderBoardHolders = new ArrayList<>();
     LeaderBoardAdapter leaderBoardAdapter;
     RecyclerView recyclerView;
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_leader_board;
+    }
+
+    @Override
+    protected int getSelectedItemId() {
+        return 0;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leader_board);
+        //setContentView(R.layouttLayoutResourceId();.activity_leader_board);
+
         getFireStoreContent();
 
     }
