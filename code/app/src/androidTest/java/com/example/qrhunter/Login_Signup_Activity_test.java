@@ -20,9 +20,7 @@ public class Login_Signup_Activity_test {
      * We test clicking on signup opens new signup activity
      */
     @Test
-    public void clickOnScannerTest() {
-        // add a comment and see it it is displayed
-
+    public void testSignUpButton() {
         onView(withId(R.id.btnSignup)).perform(click());
     }
 
