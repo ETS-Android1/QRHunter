@@ -103,6 +103,7 @@ public class Geolocation {
                             }
                             HashMap hashmapScan = (HashMap) task.getResult().getData();
                             DocumentReference referenceToCode = (DocumentReference) hashmapScan.get("qrcode");
+                            if(referenceToCode == null) { return; }
                             referenceToCode.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
                                 @Override

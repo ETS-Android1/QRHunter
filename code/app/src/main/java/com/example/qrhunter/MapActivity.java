@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -86,11 +87,12 @@ public class MapActivity extends BaseNavigatableActivity implements GeolocationL
             Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
         }
         PlacesClient placesClient = Places.createClient(this);
+
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG)).setTypeFilter(TypeFilter.GEOCODE);
 
         // listen to place selection
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
