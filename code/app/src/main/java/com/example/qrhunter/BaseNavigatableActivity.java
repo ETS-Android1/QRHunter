@@ -39,6 +39,9 @@ public abstract class BaseNavigatableActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.qrcode) {
                 Intent intent = new Intent(BaseNavigatableActivity.this, ListCodesActivity.class);
                 startActivity(intent);
+            } else if (item.getItemId() == R.id.leaderboard){
+                Intent intent = new Intent(BaseNavigatableActivity.this, LeaderBoard.class);
+                startActivity(intent);
             }else if (item.getItemId() == R.id.profile) {
                 Intent intent = new Intent(BaseNavigatableActivity.this, PlayerProfile.class);
                 startActivity(intent);

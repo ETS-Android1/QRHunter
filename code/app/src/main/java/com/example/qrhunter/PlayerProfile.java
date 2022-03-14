@@ -27,7 +27,7 @@ public class PlayerProfile extends BaseNavigatableActivity {
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     ArrayList<String> codes;
     PlayerProfileAdapter adapter;
-    private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
+    private static final String SHARED_PREFS = "USERNAME-sharedPrefs"; //getting the username here
 
     @Override
     protected int getLayoutResourceId() {
@@ -57,8 +57,11 @@ public class PlayerProfile extends BaseNavigatableActivity {
     }
 
 
+    /**
+     * A function to gets info about the profile from firestore
+     *
+     */
     public void getData(){
-        //Chnage the name to user name in the .document
         firestore.collection("User").document(loadData()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -76,6 +79,10 @@ public class PlayerProfile extends BaseNavigatableActivity {
         });
 
     }
+
+    /**
+     * a function to sjow QR codes in recycler view
+     */
     private void initRecycleView(){
         recyclerView = findViewById(R.id.recyclerViewPlayerProfile);
         adapter = new PlayerProfileAdapter(codes, this);
@@ -84,7 +91,7 @@ public class PlayerProfile extends BaseNavigatableActivity {
     }
     public String loadData() {
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        return sharedPref.getString("USERNAME-key", "default-empty-string");
+        return sharedPref.getString("USERNAME-sharedPrefs", "default-empty-string");
     }
 
 
