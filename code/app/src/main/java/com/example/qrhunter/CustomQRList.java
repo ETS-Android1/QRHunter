@@ -15,7 +15,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 /**
- * This class creates an array adapter on the QRcode class
+ * This class creates an array adapter on the QRcode class to map to the ListCodesActivity
  */
 public class CustomQRList  extends ArrayAdapter<QRCode>{
     private ArrayList<QRCode> qrCodes;
@@ -33,7 +33,7 @@ public class CustomQRList  extends ArrayAdapter<QRCode>{
     }
 
     /**
-     * This method sets the listview textviews as the QRCode Class Object values
+     * This method sets the listview textviews from content.xml as the QRCode Class Object values
      * @param position
      * @param convertView
      * @param parent

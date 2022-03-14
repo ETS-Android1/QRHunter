@@ -1,5 +1,6 @@
 package com.example.qrhunter;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +12,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -18,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerProfile extends BaseNavigatableActivity {
@@ -25,7 +30,7 @@ public class PlayerProfile extends BaseNavigatableActivity {
     TextView ProfileName, Total, Scanned, Highest, Lowest, RankOfTotal, RankOfScanned, RankOfHighest;
     RecyclerView recyclerView;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    ArrayList<String> codes;
+    ArrayList<String> codes = new ArrayList<>();
     PlayerProfileAdapter adapter;
     private static final String SHARED_PREFS = "USERNAME-sharedPrefs"; //getting the username here
 
@@ -59,7 +64,6 @@ public class PlayerProfile extends BaseNavigatableActivity {
 
     /**
      * A function to gets info about the profile from firestore
-     *
      */
     public void getData(){
         firestore.collection("User").document(loadData()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -67,7 +71,23 @@ public class PlayerProfile extends BaseNavigatableActivity {
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 assert value != null;
                 Map<String, Object> data = value.getData();
-                codes = (ArrayList<String>) data.get("codes");
+                try {
+                    ArrayList<DocumentReference> codeRefs = (ArrayList<DocumentReference>) data.get("codes");
+                    for (DocumentReference docRef : codeRefs) {
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (!task.isSuccessful()) {
+                                    return;
+                                }
+                                codes.add(task.getResult().getId());
+                                Scanned.setText("scanned: " + codes.size());
+                                initRecycleView();
+                            }
+                        });
+                    }
+                } catch(Exception e) {
+                    String msg = e.getMessage();
+                }
                 ProfileName.setText("username: "+data.get("username").toString());
                 Total.setText("total: "+data.get("worth").toString());
                 Highest.setText("highest: "+data.get("highest").toString());
@@ -81,7 +101,7 @@ public class PlayerProfile extends BaseNavigatableActivity {
     }
 
     /**
-     * a function to sjow QR codes in recycler view
+     * this function showing qr codes in recycler view
      */
     private void initRecycleView(){
         recyclerView = findViewById(R.id.recyclerViewPlayerProfile);
