@@ -22,6 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -44,6 +45,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Set;
+
 // ressources
 // https://developers.google.com/maps/documentation/places/android-sdk/autocomplete
 // https://stackoverflow.com/questions/31571050/how-to-add-google-map-markers-outside-of-onmapready-in-android
@@ -248,25 +251,27 @@ public class MapActivity extends BaseNavigatableActivity implements GeolocationL
     @Override
     public void onCameraIdle() {
         Geolocation.firestoreQueryNearbyLocations(map.getCameraPosition().target, map.getCameraPosition().zoom, this::processLocation );
+        /*Set setOfKeys = count.keySet();
+        for (Object el : setOfKeys.toArray()) {
+            MarkerOptions myOptions = (MarkerOptions) el;
+            myOptions.get
+        }*/
         // Now fire a new search with the new latitude and longitude
         // searcher.setQuery(new Query().setAroundLatLng(new AbstractQuery.LatLng(centerLat, centerLng)).setAroundRadius(5000))
     }
 
     /**
      * This is used to process locations returned from firestore
-     * @param hasmaplocation this is a hashmap with the locations
+     * @param hashmaplocation this is a hashmap with the locations
      * @param hashMapSnapshot this is a document snapshot with the document to be added to the hash map
      */
     public void processLocation(HashMap hashmaplocation, DocumentSnapshot hashMapSnapshot) {
         HashMap hashMapCode = (HashMap) hashMapSnapshot.getData();
         GeoPoint geopoint = (GeoPoint) hashmaplocation.get("location");
         try {
-            if (markers.get(geopoint.getLatitude()) != null && markers.get(geopoint).get(geopoint.getLongitude()) != null
-                    && markers.get(geopoint).get(geopoint.getLongitude()).get(hashMapSnapshot.getId()) != null) {
-                MarkerOptions options = markers.get(geopoint.getLatitude()).get(geopoint.getLongitude()).get(hashMapSnapshot.getId());
-                // SAME LOCATION, SAME QRCODE
-                options.snippet("Count: " + (count.get(options) + 1) + " Score: " + hashMapCode.get("score"));
-                count.put(options, count.get(options) + 1);
+            if (markers.get(geopoint.getLatitude()) != null && markers.get(geopoint.getLatitude()).get(geopoint.getLongitude()) != null
+                    && markers.get(geopoint.getLatitude()).get(geopoint.getLongitude()).get(hashMapSnapshot.getId()) != null) {
+                // TODO SAME LOCATION, SAME QRCODE
             }
             else{
                 MarkerOptions options = new MarkerOptions()
@@ -279,6 +284,7 @@ public class MapActivity extends BaseNavigatableActivity implements GeolocationL
                     put(geopoint.getLongitude(), idsHashed);
                 }});
                 count.put(options, Double.valueOf(1));
+                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 map.addMarker(options);
             }
         } catch (Exception e) {

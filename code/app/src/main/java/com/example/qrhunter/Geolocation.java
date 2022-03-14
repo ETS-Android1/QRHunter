@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class models a geolocation object
+ * */
 public class Geolocation {
     private Float latitude;
     private Float longitude;
