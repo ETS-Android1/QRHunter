@@ -14,16 +14,31 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+/**
+ * This class creates an array adapter on the QRcode class to map to the ListCodesActivity
+ */
 public class CustomQRList  extends ArrayAdapter<QRCode>{
     private ArrayList<QRCode> qrCodes;
     private Context context;
 
+    /**
+     * This Method creates the CustomQRList addapter
+     * @param context the activity that is being passed in
+     * @param qrCodes the QRCodes Array list
+     */
     public CustomQRList(Context context, ArrayList<QRCode> qrCodes) {
         super(context, 0, qrCodes);
         this.qrCodes= qrCodes;
         this.context = context;
     }
 
+    /**
+     * This method sets the listview textviews from content.xml as the QRCode Class Object values
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -43,6 +58,25 @@ public class CustomQRList  extends ArrayAdapter<QRCode>{
         playerName.setText("Player: "+ String.valueOf(codes.getPlayer()));
         points.setText("Points: "+String.valueOf(codes.getScore()));
         return view;
+    }
+
+
+    /**
+     * This method is for testing, it will get us the size of the list of QRCodes
+     * @return the number of QRcodes that we have
+     */
+    public int getCount() {
+        return qrCodes.size();
+    }
+
+
+    /**
+     * This method will add a qrcodes object to the list
+     * @param qrCode takes in QRcode to be added
+     */
+    public void addQR(QRCode qrCode) {
+        qrCodes.add(qrCode);
+        return;
     }
 
 }

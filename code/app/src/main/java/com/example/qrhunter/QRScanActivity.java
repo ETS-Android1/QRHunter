@@ -50,6 +50,9 @@ interface ListensToQrUpload {
     public void onQrUpload(DocumentReference qrCode);
 }
 
+/**
+ * This class is presented to allow the user to scan a qrcode
+ */
 public class QRScanActivity extends BaseNavigatableActivity implements  ListensToQrUpload {
     // TO DO REPLACE WITH Real username
     private FirebaseFirestore db;

@@ -1,18 +1,33 @@
 package com.example.qrhunter;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 public class PlayerProfile extends BaseNavigatableActivity {
 
     TextView ProfileName, Total, Scanned, Highest, Lowest, RankOfTotal, RankOfScanned, RankOfHighest;
     RecyclerView recyclerView;
-    ArrayList<String> points = new ArrayList<>();
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    ArrayList<String> codes;
+    PlayerProfileAdapter adapter;
+    private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
 
     @Override
     protected int getLayoutResourceId() {
@@ -36,21 +51,40 @@ public class PlayerProfile extends BaseNavigatableActivity {
         RankOfTotal = findViewById(R.id.rankPlayer1);
         RankOfScanned =  findViewById(R.id.rankPlayer2);
         RankOfHighest = findViewById(R.id.rankPlayer3);
-        recyclerView = findViewById(R.id.recyclerView);
-        int totalNum = 100;
-        int scannedNum = 5;
-        int highNum = 20;
-        int lowNum = 4;
 
-        Total.setText("Total points " + totalNum);
-        Scanned.setText("Scanned " + scannedNum);
-        Highest.setText("Highest "+ highNum);
-        Lowest.setText("Lowest "+lowNum);
+        getData();
+
+    }
 
 
+    public void getData(){
+        //Chnage the name to user name in the .document
+        firestore.collection("User").document(loadData()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                assert value != null;
+                Map<String, Object> data = value.getData();
+                codes = (ArrayList<String>) data.get("codes");
+                ProfileName.setText("username: "+data.get("username").toString());
+                Total.setText("total: "+data.get("worth").toString());
+                Highest.setText("highest: "+data.get("highest").toString());
+                Lowest.setText("lowest: "+data.get("lowest").toString());
+                Scanned.setText("scanned: " + codes.size());
+                initRecycleView();
 
+            }
+        });
 
-
+    }
+    private void initRecycleView(){
+        recyclerView = findViewById(R.id.recyclerViewPlayerProfile);
+        adapter = new PlayerProfileAdapter(codes, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+    public String loadData() {
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        return sharedPref.getString("USERNAME-key", "default-empty-string");
     }
 
 
