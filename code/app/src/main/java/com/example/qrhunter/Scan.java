@@ -34,6 +34,7 @@ public class Scan {
         Long tsLong = System.currentTimeMillis()/1000;
         data.put("createdAt", tsLong);
         data.put("user",  user);
+        user.update("scans", FieldValue.arrayUnion(scan));
         data.put("qrCode", qrCode);
         qrCode.update("scans", FieldValue.arrayUnion(scan));
         if( location != null) {

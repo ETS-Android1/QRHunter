@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -81,6 +82,7 @@ public class QRCode {
             DocumentSnapshot d = task.getResult();
             Map<String, Object> data = new HashMap<>();
             Long tsLong = System.currentTimeMillis()/1000;
+            player.update("codes", FieldValue.arrayUnion(qrCodeRef));
             data.put("score", ScoringSystem.calculateScore(uniqueHash));
             data.put("timeCreated", tsLong);
             data.put("createdBy", player);
