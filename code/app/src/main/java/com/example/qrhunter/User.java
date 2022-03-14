@@ -3,7 +3,7 @@ package com.example.qrhunter;
 import java.util.ArrayList;
 
 /**
- * This class models a user
+ * Represents the user object when logged in
  */
 public class User {
     String username, password, email, phoneNum;
@@ -12,6 +12,17 @@ public class User {
     Float totalScore;
     Float highest, lowest, worth;
 
+    /**
+     * Creates the user object when a new user signs up
+     * @param username
+     * String representing the unique username
+     * @param password
+     * String representing the password
+     * @param email
+     * String representing the email
+     * @param phoneNum
+     * String representing the phone number
+     */
     public User(String username, String password, String email, String phoneNum) {
         this.username = username;
         this.password = password;

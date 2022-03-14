@@ -136,6 +136,7 @@ public class Login_Signup_Activity extends AppCompatActivity {
     /**
      * Saves the logged in username to local storage for other activities to access
      * @param username
+     * String object representing the username
      */
     public void saveData(String username) {
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
