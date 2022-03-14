@@ -29,7 +29,8 @@ import android.widget.Button;
 public class MainActivity extends BaseNavigatableActivity {
     Button userQRInfo;
     Button profileQRInfo;
-
+    Button leader;
+    Button playerProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -52,7 +53,6 @@ public class MainActivity extends BaseNavigatableActivity {
         return R.layout.activity_main;
     }
 
-
     /**
      * This is called by the base activity to get the selected item on create
      * @return returns item id corresponding to the activity
@@ -61,5 +61,6 @@ public class MainActivity extends BaseNavigatableActivity {
     protected int getSelectedItemId() {
         return R.id.camera;
     }
+
 
 }

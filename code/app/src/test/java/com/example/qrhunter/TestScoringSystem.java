@@ -15,7 +15,7 @@ public class TestScoringSystem {
     public void test__score_system() {
         String testString = "abbassd";
         Double myScore = ScoringSystem.calculateScore(testString);
-        float manualScore = 0;
+        double manualScore = 0;
         for (char el : testString.toCharArray()) {
             manualScore = manualScore + el;
         }

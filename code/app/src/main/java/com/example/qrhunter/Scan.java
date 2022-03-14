@@ -11,6 +11,9 @@ import com.google.type.DateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class models a qrcode scan
+ */
 public class Scan {
     private DateTime time;
     private Geolocation place;
