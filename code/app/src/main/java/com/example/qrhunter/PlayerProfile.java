@@ -61,9 +61,10 @@ public class PlayerProfile extends BaseNavigatableActivity {
 
     }
 
-
+    /**
+     * gets the data of user from the database
+     */
     public void getData(){
-        //Chnage the name to user name in the .document
         firestore.collection("User").document(loadData()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -97,6 +98,10 @@ public class PlayerProfile extends BaseNavigatableActivity {
         });
 
     }
+
+    /**
+     * this function showing qr codes in recycler view
+     */
     private void initRecycleView(){
         recyclerView = findViewById(R.id.recyclerViewPlayerProfile);
         adapter = new PlayerProfileAdapter(codes, this);
