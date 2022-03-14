@@ -2,6 +2,9 @@ package com.example.qrhunter;
 
 import java.util.ArrayList;
 
+/**
+ * This class models a user
+ */
 public class User {
     String username, password, email, phoneNum;
     String uniqueQRHash;

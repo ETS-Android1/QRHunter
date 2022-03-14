@@ -11,9 +11,30 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 // https://stackoverflow.com/questions/8821240/android-how-to-create-my-own-activity-and-extend-it
+
+/**
+ * This class handles the navigation logic
+ */
 public abstract class BaseNavigatableActivity extends AppCompatActivity {
     protected abstract int getLayoutResourceId();
     protected abstract int getSelectedItemId();
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+        MenuItem activeItem = bottomNav.getMenu().findItem(getSelectedItemId());
+        activeItem.setChecked(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+        MenuItem activeItem = bottomNav.getMenu().findItem(getSelectedItemId());
+        activeItem.setChecked(true);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
