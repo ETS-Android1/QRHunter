@@ -254,7 +254,7 @@ public class MapActivity extends BaseNavigatableActivity implements GeolocationL
 
     /**
      * This is used to process locations returned from firestore
-     * @param hasmaplocation this is a hashmap with the locations
+     * @param hashmaplocation this is a hashmap with the locations
      * @param hashMapSnapshot this is a document snapshot with the document to be added to the hash map
      */
     public void processLocation(HashMap hashmaplocation, DocumentSnapshot hashMapSnapshot) {

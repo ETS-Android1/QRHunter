@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @class QRCode
  * this class represents the qrcodes that are scanned
  */
 public class QRCode {

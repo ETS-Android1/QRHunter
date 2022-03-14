@@ -15,6 +15,12 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -25,6 +31,32 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+}
+
+
+task javadoc(type: Javadoc) {
+
+    doFirst {
+        configurations.implementation
+                .filter { it.name.endsWith('.aar') }
+                .each { aar ->
+                    copy {
+                        from zipTree(aar)
+                        include "**/classes.jar"
+                        into "$buildDir/tmp/aarsToJars/${aar.name.replace('.aar', '')}/"
+                    }
+                }
+    }
+
+    configurations.implementation.setCanBeResolved(true)
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.implementation
+    classpath += fileTree(dir: "$buildDir/tmp/aarsToJars/")
+    destinationDir = file("${project.buildDir}/outputs/javadoc/")
+    failOnError false
+    exclude '**/BuildConfig.java'
+    exclude '**/R.java'
 }
 
 dependencies {
@@ -45,6 +77,8 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.8.1'
     implementation 'com.google.firebase:firebase-database:20.0.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
     testImplementation 'junit:junit:4.13.2'
     testImplementation "org.mockito:mockito-core:3.+"
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
