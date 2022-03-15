@@ -32,7 +32,7 @@ public class LeaderBoard extends BaseNavigatableActivity {
 
     @Override
     protected int getSelectedItemId() {
-        return 0;
+        return R.id.leaderboard;
     }
 
     @Override
