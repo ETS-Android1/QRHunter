@@ -16,6 +16,10 @@
         android:id="@+id/search"
          />
     <item
+        android:icon="@drawable/ic_leaderboard"
+        android:title="@string/leaderboard"
+        android:id="@+id/leaderboard"/>
+    <item
         android:icon="@drawable/ic_profile"
         android:title="@string/profile"
         android:id="@+id/profile"/>

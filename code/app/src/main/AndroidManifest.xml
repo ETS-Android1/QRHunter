@@ -50,6 +50,9 @@
             android:name=".ListCodesActivity"
             android:exported="false" />
         <activity
+            android:name=".LeaderBoard"
+            android:exported="false"/>
+        <activity
             android:name=".PlayerProfile"
             android:exported="false"/>
         <activity
