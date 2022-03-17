@@ -1,51 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_weight="2">
+
+    <LinearLayout
         android:layout_height="wrap_content"
-        android:padding = "5dp"
-        android:text = "QR ref"
-        android:textSize = "20sp"
-        android:id = "@+id/location_text"
-        android:textColor="@color/black">
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-    </TextView>
+        <TextView
+            android:id="@+id/qr_ref_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="QR ref"
+            android:textColor="@color/black"
+            android:textSize="20sp">
 
-    <TextView
-        android:id="@+id/scanners_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="scanners"
-        android:textSize="20sp"
-        android:textColor="@color/black">
+        </TextView>
 
-    </TextView>
+        <TextView
+            android:id="@+id/scanners_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="scanners"
+            android:textColor="@color/black"
+            android:textSize="20sp">
 
-
-    <TextView
-        android:id="@+id/player_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="Player"
-        android:textSize="20sp"
-        android:textColor="@color/black">
-
-    </TextView>
+        </TextView>
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding = "5dp"
-        android:text = "points"
-        android:textSize = "20sp"
-        android:id = "@+id/points_text"
-        android:textColor="@color/black">
+        <TextView
+            android:id="@+id/player_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Player"
+            android:textColor="@color/black"
+            android:textSize="20sp">
 
-    </TextView>
+        </TextView>
+
+
+        <TextView
+            android:id="@+id/points_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="points"
+            android:textColor="@color/black"
+            android:textSize="20sp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/location_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="No location available"
+            android:textColor="@color/black"
+            android:textSize="20sp">
+
+        </TextView>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/qrcode_image"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_qrcode" />
 </LinearLayout>
