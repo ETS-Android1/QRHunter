@@ -55,13 +55,11 @@ public class CustomQRList  extends ArrayAdapter<QRCode>{
             view = LayoutInflater.from(context).inflate(R.layout.content, parent,false);
         }
         QRCode codes = qrCodes.get(position);
-        TextView qrRef = view.findViewById(R.id.qr_ref_text);
         TextView locationText = view.findViewById(R.id.location_text);
         TextView scanners = view.findViewById(R.id.scanners_text);
         //TextView date = view.findViewById(R.id.date_text);
         TextView points= view.findViewById(R.id.points_text);
         TextView playerName = view.findViewById(R.id.player_text);
-        qrRef.setText("QR code "+codes.getUniqueHash());
         scanners.setText("Scanners: "+String.valueOf(codes.getNumScans()));
         //date.setText("Time Created: "+String.valueOf( codes.getTime()));
         playerName.setText("Created By: "+ String.valueOf(codes.getPlayer().getId()));

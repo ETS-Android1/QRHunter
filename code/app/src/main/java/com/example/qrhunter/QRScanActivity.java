@@ -122,6 +122,10 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
             Log.e("ERROR IN QRSCANE", msg);
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        checkLastLocation();
+    }
+
+    public  void checkLastLocation() {
         if (ActivityCompat.checkSelfPermission(QRScanActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(QRScanActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getLastLocation();
@@ -130,9 +134,7 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_REQUEST_LOCATION);
         }
-
     }
-
     public void getLastLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -208,6 +210,7 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
             case MY_PERMISSIONS_REQUEST_CAMERA: {
                 setup();
                 mCodeScanner.startPreview();
+                checkLastLocation();
             }
             case MY_PERMISSIONS_REQUEST_LOCATION: {
                 if (grantResults.length > 0

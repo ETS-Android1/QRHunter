@@ -11,17 +11,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/qr_ref_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="QR ref"
-            android:textColor="@color/black"
-            android:textSize="20sp">
-
-        </TextView>
+        
 
         <TextView
             android:id="@+id/scanners_text"
