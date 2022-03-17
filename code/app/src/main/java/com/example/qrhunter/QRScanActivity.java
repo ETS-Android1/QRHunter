@@ -37,10 +37,14 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.digest.DigestUtils;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.zxing.Result;
+
+import java.util.HashMap;
+import java.util.Map;
 // https://github.com/yuriy-budiyev/code-scanner
 
 /**
@@ -52,6 +56,7 @@ interface ListensToQrUpload {
      * is called when the upload is unsuccessful
      */
     public void onQrUploadFail();
+
     /**
      * is called when the upload is successful
      * @param qrCode reference to the document to be uploaded
@@ -62,13 +67,16 @@ interface ListensToQrUpload {
 /**
  * This class is presented to allow the user to scan a qrcode
  */
-public class QRScanActivity extends BaseNavigatableActivity implements  ListensToQrUpload {
+public class QRScanActivity extends BaseNavigatableActivity implements ListensToQrUpload {
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     // TO DO REPLACE WITH Real username
     private FirebaseFirestore db;
     private FusedLocationProviderClient fusedLocationClient;
     // TODO fix with logged in user
     private DocumentReference user;
-    private  LatLng currentLocation = null;
+    private DocumentReference scanRef;
+    private DocumentReference locationRef;
+    private LatLng currentLocation = null;
     private Snackbar onUpload;
     private Snackbar onComplete;
     private Snackbar onFail;
@@ -109,28 +117,38 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
             onUpload = Snackbar.make(findViewById(R.id.bottom_nav), R.string.MESSAGE_ON_SCAN, BaseTransientBottomBar.LENGTH_LONG);
             onComplete = Snackbar.make(findViewById(R.id.bottom_nav), R.string.MESSAGE_ON_UPLOAD, BaseTransientBottomBar.LENGTH_LONG);
             onFail = Snackbar.make(findViewById(R.id.bottom_nav), R.string.MESSAGE_ON_FAIL, BaseTransientBottomBar.LENGTH_LONG);
-        } catch(Exception e) {
-            String msg=  e.getMessage();
+        } catch (Exception e) {
+            String msg = e.getMessage();
             Log.e("ERROR IN QRSCANE", msg);
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(QRScanActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(QRScanActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(QRScanActivity.this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                currentLocation = new LatLng(location.getLatitude(),
-                                        location.getLongitude());
-
-                            }
-                        }
-                    });
-            }
+            getLastLocation();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
+        }
 
     }
 
+    public void getLastLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(QRScanActivity.this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            currentLocation = new LatLng(location.getLatitude(),
+                                    location.getLongitude());
+
+                        }
+                    }
+                });
+    }
     /**
      * loads USERNAME from SharedPreferences
      * @return username used to login
@@ -187,9 +205,22 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
                                            String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CAMERA:
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
                 setup();
                 mCodeScanner.startPreview();
+            }
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // premission granted
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        getLastLocation();
+                    }
+                }
+            }
         }
     }
     @Override
@@ -225,6 +256,17 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if (task.isSuccessful()) {
+                    riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("image",uri.toString());
+                            QRScanActivity.this.myCode.getQrCodeRef().update(data);
+                            scanRef.update(data);
+                            Uri downloadUrl = uri;
+                            //Do what you want with the url
+                        }
+                    });
                     onImage.show();
                     onImage.setText("Image uploaded");
                 } else {
@@ -250,16 +292,19 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
 
     @Override
     public void onQrUpload(DocumentReference qrCode) {
-        DocumentReference currentLocation = db.collection("location").document();
-        DocumentReference currentScan = db.collection("scans").document();
+        locationRef = db.collection("location").document();
+        scanRef = db.collection("scans").document();
         if (this.currentLocation != null) {
-            Geolocation.uploadGeolocationForScan(currentLocation, this.currentLocation, "", currentScan, new OnCompleteListener<Void>() {
+            Geolocation.uploadGeolocationForScan(locationRef, this.currentLocation, "", scanRef, new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()) {
-                        Scan.uploadScan(currentScan, currentLocation, qrCode, user, new OnCompleteListener<Void>() {
+                        Scan.uploadScan(scanRef, locationRef, qrCode, user, new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("location",locationRef);
+                                qrCode.update(data);
                                 QRScanActivity.this.onSuccessfulUpload();
                             }
                         });
@@ -271,7 +316,7 @@ public class QRScanActivity extends BaseNavigatableActivity implements  ListensT
                 }
             });
         } else {
-            Scan.uploadScan(currentScan, null, qrCode, user, new OnCompleteListener<Void>() {
+            Scan.uploadScan(scanRef, null, qrCode, user, new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()) {
