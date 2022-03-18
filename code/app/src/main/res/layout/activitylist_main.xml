@@ -7,23 +7,27 @@
     tools:context=".ListCodesActivity"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp">
+    android:paddingTop="16dp"
+    android:layout_weight="2">
 
 
     <!--ListView to show QRcodes change magrin bottom for buttons-->
     <ListView
         android:id="@+id/qr_list"
+        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
-        android:layout_height="638dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
         android:divider="@color/black"
         android:dividerHeight="2dp"></ListView>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"
