@@ -50,10 +50,8 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         }
         // fill the list element with the username and the comment itself
         Comment comment = comments.get(position);
-        TextView commentUser = view.findViewById(R.id.playerId);
         TextView commentContent = view.findViewById(R.id.comment);
 
-        commentUser.setText(comment.getUser());
         commentContent.setText(comment.getComment());
         return view;
     }

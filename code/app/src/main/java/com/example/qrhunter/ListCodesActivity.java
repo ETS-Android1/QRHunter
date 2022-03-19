@@ -103,7 +103,10 @@ public class ListCodesActivity extends BaseNavigatableActivity implements Adapte
         //use this to get info of the clicked item
         // adapterView.getItemAtPosition(i);
         Intent intent = new Intent(ListCodesActivity.this, UserQRInfoActivity.class);
-
+        QRCode code = dummyQRlist.get(i);
+        intent.putExtra("score", code.getScore());
+        intent.putExtra("scans", code.getNumScans());
+        intent.putExtra("hash", code.getUniqueHash());
         startActivity(intent);
     }
 }
