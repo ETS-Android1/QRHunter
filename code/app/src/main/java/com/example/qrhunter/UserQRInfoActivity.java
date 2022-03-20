@@ -69,7 +69,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
      */
     @Override
     protected int getSelectedItemId() {
-        return R.id.profile;
+        return R.id.qrcode;
     }
 
     @Override

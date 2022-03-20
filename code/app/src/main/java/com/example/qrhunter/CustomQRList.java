@@ -1,21 +1,28 @@
 package com.example.qrhunter;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
-
 /**
- * This class creates an array adapter on the QRcode class
+ * This class creates an array adapter on the QRcode class to map to the ListCodesActivity
  */
 public class CustomQRList  extends ArrayAdapter<QRCode>{
     private ArrayList<QRCode> qrCodes;
@@ -32,8 +39,9 @@ public class CustomQRList  extends ArrayAdapter<QRCode>{
         this.context = context;
     }
 
+
     /**
-     * This method sets the listview textviews as the QRCode Class Object values
+     * This method sets the listview textviews from content.xml as the QRCode Class Object values
      * @param position
      * @param convertView
      * @param parent
@@ -47,16 +55,35 @@ public class CustomQRList  extends ArrayAdapter<QRCode>{
             view = LayoutInflater.from(context).inflate(R.layout.content, parent,false);
         }
         QRCode codes = qrCodes.get(position);
-        TextView qrRef = view.findViewById(R.id.location_text);
+        TextView locationText = view.findViewById(R.id.location_text);
         TextView scanners = view.findViewById(R.id.scanners_text);
         //TextView date = view.findViewById(R.id.date_text);
         TextView points= view.findViewById(R.id.points_text);
         TextView playerName = view.findViewById(R.id.player_text);
-        qrRef.setText("QR code "+codes.getUniqueHash());
         scanners.setText("Scanners: "+String.valueOf(codes.getNumScans()));
         //date.setText("Time Created: "+String.valueOf( codes.getTime()));
-        playerName.setText("Player: "+ String.valueOf(codes.getPlayer()));
+        playerName.setText("Created By: "+ String.valueOf(codes.getPlayer().getId()));
         points.setText("Points: "+String.valueOf(codes.getScore()));
+        ImageView qrCodeImage = view.findViewById(R.id.qrcode_image);
+        codes.getQrCodeRef().get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.getData().containsKey("image")) {
+                    new ImageFile(qrCodeImage)
+                            .execute((String) documentSnapshot.getData().get("image"));
+                }
+                if (documentSnapshot.getData().containsKey("location")) {
+                    DocumentReference location = (DocumentReference) documentSnapshot.getData().get("location");
+                    location.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            GeoPoint thisLocation = documentSnapshot.getGeoPoint("location");
+                            locationText.setText("Lat: " + thisLocation.getLatitude() + "\nLng: " + thisLocation.getLongitude());
+                        }
+                    });
+                }
+            }
+        });
         return view;
     }
 

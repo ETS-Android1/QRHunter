@@ -103,11 +103,20 @@
         android:text="112/1000 players"
         android:textAlignment="center"
         android:id="@+id/rankPlayer3"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Generate token"
+        android:layout_below="@id/lowest"
+        android:layout_marginTop="5dp"
+        android:id="@+id/generate_button"
+        android:onClick="generate_token"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lowest"
-        android:layout_marginTop="50dp"
+        android:layout_below="@+id/generate_button"
+        android:layout_marginTop="10dp"
         android:layout_alignParentBottom="true"
         android:id="@+id/recyclerViewPlayerProfile"/>
 

@@ -11,6 +11,9 @@ import com.google.type.DateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class models a qrcode scan
+ */
 public class Scan {
     private DateTime time;
     private Geolocation place;
@@ -31,6 +34,7 @@ public class Scan {
         Long tsLong = System.currentTimeMillis()/1000;
         data.put("createdAt", tsLong);
         data.put("user",  user);
+        user.update("scans", FieldValue.arrayUnion(scan));
         data.put("qrCode", qrCode);
         qrCode.update("scans", FieldValue.arrayUnion(scan));
         if( location != null) {
