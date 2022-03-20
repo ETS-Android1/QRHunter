@@ -145,7 +145,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                                 collectionReference.document(hash).update("comments", FieldValue.arrayUnion(commentData));
                             } else {
                                 List<String> newComments = new ArrayList<String>();
-                                newComments.add(commentData);;
+                                newComments.add(commentData);
                                 CommentHelper newComment = new CommentHelper(newComments);
                                 collectionReference.document(hash).set(newComment);
                             }
