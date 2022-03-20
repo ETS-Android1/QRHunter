@@ -11,16 +11,6 @@
         android:layout_marginLeft="10dp"
         android:layout_gravity="center_vertical"/>
 
-    <TextView
-        android:id="@+id/playerId"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.3"
-        android:text="player"
-        android:textSize="25sp"
-        android:gravity="center_vertical">
-
-    </TextView>
 
     <TextView
         android:id="@+id/comment"

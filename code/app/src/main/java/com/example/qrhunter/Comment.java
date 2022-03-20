@@ -9,18 +9,10 @@ public class Comment {
     private String user;
     private String comment;
 
-    public Comment(String user, String comment) {
-        this.user = user;
+    public Comment(String comment) {
         this.comment = comment;
     }
 
-    /**
-     * Getter for username
-     * @return the username
-     */
-    public String getUser() {
-        return this.user;
-    }
     /**
      * Getter for comment data
      * @return the comment itself
@@ -29,13 +21,6 @@ public class Comment {
         return this.comment;
     }
 
-    /**
-     * Setter for username
-     * @param user the user to be set
-     */
-    public void setUser(String user) {
-        this.user = user;
-    }
 
     /**
      * Setter for comment data
