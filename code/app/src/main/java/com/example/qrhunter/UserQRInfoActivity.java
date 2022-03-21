@@ -127,6 +127,10 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         sendComment = findViewById(R.id.sendComment);
 
         delete.setOnClickListener(new View.OnClickListener() {
+            /**
+             * This method deletes the following QR code from the database and updates the list
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 collectionQRReference.document(hash)
@@ -219,6 +223,8 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                Intent intent = new Intent(UserQRInfoActivity.this, ListCodesActivity.class);
+                startActivity(intent);
             }
         });
 
