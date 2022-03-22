@@ -10,7 +10,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerProfile extends BaseNavigatableActivity {
+public class OtherProfileView extends BaseNavigatableActivity {
 
     TextView ProfileName, Total, Scanned, Highest, Lowest, RankOfTotal, RankOfScanned, RankOfHighest;
     RecyclerView recyclerView;
@@ -34,9 +38,12 @@ public class PlayerProfile extends BaseNavigatableActivity {
     PlayerProfileAdapter adapter;
     private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
 
+
+
+
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.activity_player_profile;
+        return R.layout.activity_other_profile_view;
     }
 
     @Override
@@ -60,12 +67,16 @@ public class PlayerProfile extends BaseNavigatableActivity {
         getData();
 
     }
-
+    public void generate_token(View view){
+        if  (view.getId()==R.id.generate_button){
+            Toast.makeText(this,"token generated",Toast.LENGTH_SHORT).show();
+        }
+    }
     /**
      * gets the data of user from the database
      */
     public void getData(){
-        firestore.collection("User").document(loadData()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        firestore.collection("User").document(getIntent().getStringExtra("leaderBoardUserNameIntent")).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 assert value != null;
@@ -112,6 +123,7 @@ public class PlayerProfile extends BaseNavigatableActivity {
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         return sharedPref.getString("USERNAME-key", "default-empty-string");
     }
+
 
 
 }
