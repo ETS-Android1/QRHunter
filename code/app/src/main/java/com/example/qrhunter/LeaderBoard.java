@@ -18,6 +18,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardAdapter.OnItemListener {
@@ -37,7 +40,7 @@ public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardA
     private TextView rank;
     private static final String TAG = "LeaderBoard";
     private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
-
+    HashMap<DocumentReference, Double> myMapOfCodes = new HashMap<>();
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_leader_board;
@@ -87,31 +90,66 @@ public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardA
         firestore.collection("User").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                final Integer[] sizeOfUsers = {value.size()};
+                final Integer[] countOfUsers = {0};
                 for(DocumentSnapshot snapshot : value.getDocuments()){
                     Map<String, Object> map = snapshot.getData();
-                    for(String key : map.keySet()){
-                        if(key.equals("username")){
-                            leaderBoardHolders.add(new LeaderBoardHolder(map.get("username").toString(),
-                                    map.get("worth").toString()));
-                            /*map.get("username").toString() +", "+map.get("worth").toString());
-                            string[] arr = list.split(",");*/
+                    if(map.get("codes") == null || ((ArrayList<DocumentReference>) map.get("codes")).isEmpty()) {
+                        LeaderBoardHolder holder = new LeaderBoardHolder(map.get("username").toString(),
+                                String.valueOf(0));
+                        leaderBoardHolders.add(holder);
+                        countOfUsers[0] = countOfUsers[0] + 1;
+                        if (countOfUsers[0] == (sizeOfUsers[0])) {
+                            sortUsers();
                         }
                     }
-                }
-                Collections.sort(leaderBoardHolders, Collections.reverseOrder());
-                for(int i = 0; i<leaderBoardHolders.size(); i++){
-                    leaderBoardHolders.get(i).setUserRank(i+1);
-                }
-                for(int i = 0; i < leaderBoardHolders.size(); i++){
-                    if(leaderBoardHolders.get(i).getUserName().equals(userNameLoad())){
-                        rank.setText("USER RANK BY SCORE: "+leaderBoardHolders.get(i).getUserRank());
+                    ArrayList<DocumentReference> myList = (ArrayList<DocumentReference>) map.get("codes");
+                    final Integer[] count = { myList.size() };
+                    final Integer[] count2 = { 0};
+                    final Double[] score = {0.0};
+                    for(DocumentReference el : myList) {
+                        if(myMapOfCodes.get(el) != null) {
+                            score[0] = score[0] + myMapOfCodes.get(el);
+                        } else {
+                            el.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    score[0] = score[0] + ((Double) documentSnapshot.getData().get("score"));
+                                    myMapOfCodes.put(el, ((Double) documentSnapshot.getData().get("score")));
+                                    count2[0] = count2[0] + 1;
+                                    if (count2[0] == count[0]) {
+                                        LeaderBoardHolder holder = new LeaderBoardHolder(map.get("username").toString(),
+                                                String.valueOf(score[0]));
+                                        leaderBoardHolders.add(holder);
+                                        countOfUsers[0] = countOfUsers[0] + 1;
+                                        if (countOfUsers[0] == (sizeOfUsers[0])) {
+                                            sortUsers();
+                                        }
+                                    }
+                                }
+                            });
+                        }
                     }
+                        /*map.get("username").toString() +", "+map.get("worth").toString());
+                        string[] arr = list.split(",");*/
+
                 }
-                initRecycleView();
             }
         });
     }
 
+    private void sortUsers() {
+        Collections.sort(leaderBoardHolders, Collections.reverseOrder());
+        for(int i = 0; i<leaderBoardHolders.size(); i++){
+            leaderBoardHolders.get(i).setUserRank(i+1);
+        }
+        for(int i = 0; i < leaderBoardHolders.size(); i++){
+            if(leaderBoardHolders.get(i).getUserName().equals(userNameLoad())){
+                rank.setText("USER RANK BY SCORE: "+leaderBoardHolders.get(i).getUserRank());
+            }
+        }
+        initRecycleView();
+    }
     private void initRecycleView(){
         recyclerView = findViewById(R.id.leaderBoardRecycleView);
         leaderBoardAdapter = new LeaderBoardAdapter(leaderBoardHolders, this,this);
