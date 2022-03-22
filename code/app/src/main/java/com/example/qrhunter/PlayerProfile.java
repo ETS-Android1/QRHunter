@@ -10,9 +10,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -24,6 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class PlayerProfile extends BaseNavigatableActivity {
 
@@ -32,6 +36,7 @@ public class PlayerProfile extends BaseNavigatableActivity {
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     ArrayList<String> codes = new ArrayList<>();
     PlayerProfileAdapter adapter;
+    DocumentReference user;
     private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
 
     @Override
@@ -44,6 +49,33 @@ public class PlayerProfile extends BaseNavigatableActivity {
         return R.id.profile;
     }
 
+    public void get_individual_token() {
+        String  uniqueId = "QRHUNTERTOKEN:" + UUID.randomUUID().toString();
+        firestore.collection("User").whereEqualTo("secure_token", uniqueId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    get_individual_token();
+                } else {
+
+                    user.update("secure_token", uniqueId).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(PlayerProfile.this,"token generated",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
+    public void generate_token(View view){
+        if  (view.getId()==R.id.generate_button){
+            get_individual_token();
+
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +101,7 @@ public class PlayerProfile extends BaseNavigatableActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 assert value != null;
+                user = value.getReference();
                 Map<String, Object> data = value.getData();
                 try {
                     ArrayList<DocumentReference> codeRefs = (ArrayList<DocumentReference>) data.get("codes");
