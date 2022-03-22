@@ -1,5 +1,5 @@
 package com.example.qrhunter;
-
+// https://stackoverflow.com/questions/8800919/how-to-generate-a-qr-code-for-an-android-application
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,10 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,8 +44,36 @@ public class PlayerProfile extends BaseNavigatableActivity {
     ArrayList<String> codes = new ArrayList<>();
     PlayerProfileAdapter adapter;
     DocumentReference user;
+    Map<String, Object> userData;
+    private Bitmap myMap;
+    private String message;
     private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
 
+    public Bitmap getMap() {
+        return myMap;
+    }
+    public String getMessage() {
+        return message;
+    }
+    public void writeQrCode(String content) {
+        QRCodeWriter writer = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+            myMap = bmp;
+
+
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_player_profile;
@@ -57,17 +92,30 @@ public class PlayerProfile extends BaseNavigatableActivity {
                 if (!queryDocumentSnapshots.isEmpty()) {
                     get_individual_token();
                 } else {
-
                     user.update("uniqueLoginHash", uniqueId).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(PlayerProfile.this,"token generated",Toast.LENGTH_SHORT).show();
+                            writeQrCode(uniqueId);
+                            message = "Login QRCODE(Do not share):";
+                            DisplayCodeFragment dialog = DisplayCodeFragment.newInstance("Login QRCODE(Do not share):");
+                            dialog.show(PlayerProfile.this.getSupportFragmentManager(), "DIALOG");
                         }
                     });
 
                 }
             }
         });
+    }
+
+    public void generate_status(View view){
+        if  (view.getId()==R.id.generate_status){
+            String  uniqueId = "QRHUNTERSTATUS:" + loadData();
+            writeQrCode(uniqueId);
+            message = "Status QRCODE:";
+            DisplayCodeFragment dialog = DisplayCodeFragment.newInstance(message);
+            dialog.show(PlayerProfile.this.getSupportFragmentManager(), "DIALOG");
+        }
     }
 
     public void generate_token(View view){
@@ -102,9 +150,9 @@ public class PlayerProfile extends BaseNavigatableActivity {
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                 assert value != null;
                 user = value.getReference();
-                Map<String, Object> data = value.getData();
+                Map<String, Object> userData = value.getData();
                 try {
-                    ArrayList<DocumentReference> codeRefs = (ArrayList<DocumentReference>) data.get("codes");
+                    ArrayList<DocumentReference> codeRefs = (ArrayList<DocumentReference>) userData.get("codes");
                     for (DocumentReference docRef : codeRefs) {
                         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -120,10 +168,10 @@ public class PlayerProfile extends BaseNavigatableActivity {
                 } catch(Exception e) {
                     String msg = e.getMessage();
                 }
-                ProfileName.setText("username: "+data.get("username").toString());
-                Total.setText("total: "+data.get("worth").toString());
-                Highest.setText("highest: "+data.get("highest").toString());
-                Lowest.setText("lowest: "+data.get("lowest").toString());
+                ProfileName.setText(userData.get("username").toString());
+                Total.setText("total: "+userData.get("worth").toString());
+                Highest.setText("highest: "+userData.get("highest").toString());
+                Lowest.setText("lowest: "+userData.get("lowest").toString());
                 Scanned.setText("scanned: " + codes.size());
                 initRecycleView();
 
