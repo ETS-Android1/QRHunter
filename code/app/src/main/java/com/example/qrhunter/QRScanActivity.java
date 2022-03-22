@@ -36,6 +36,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.digest.DigestUtils;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
@@ -85,6 +86,11 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
     private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
     private String USERNAME;
     private QRCode myCode;
+    private String viewProfile = "";
+
+    public String getViewProfile () {
+      return viewProfile;
+    };
 
     @Override
     protected int getLayoutResourceId() {
@@ -174,14 +180,46 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String sha256hex = DigestUtils.sha256Hex(result.toString());
-                        String res = result.toString();
-                        LatLng location = null;
-                        Toast.makeText(QRScanActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
-                        onUpload.show();
-                        myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, null, user, QRScanActivity.this);
-                        //QRCode myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, user, QRScanActivity.this);
-                        myCode.uploadQRCode();
+                        if(result.toString().contains("QRHUNTERSTATUS:")) {
+                            String profileName = result.toString().replace("QRHUNTERSTATUS:","");
+                            db.collection("User").document(profileName).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    if(!documentSnapshot.exists()) {
+                                        Toast.makeText(QRScanActivity.this, "Could not find user", Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
+                                    Intent intent;
+                                    if (USERNAME.equals(profileName)) {
+                                        intent = new Intent(QRScanActivity.this, PlayerProfile.class);
+                                        startActivity(intent);
+                                    } else {
+                                        String sha256hex = DigestUtils.sha256Hex(result.toString());
+                                        String res = result.toString();
+                                        LatLng location = null;
+                                        Toast.makeText(QRScanActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+                                        onUpload.show();
+                                        viewProfile = profileName;
+                                        myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, null, user, QRScanActivity.this);
+                                        //QRCode myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, user, QRScanActivity.this);
+                                        myCode.uploadQRCode();
+
+                                        //intent = new Intent(QRScanActivity.this, OtherProfileView.class);
+                                        //intent.putExtra("leaderBoardUserNameIntent", profileName);
+                                    }
+                                }
+                            });
+                        } else {
+                            String sha256hex = DigestUtils.sha256Hex(result.toString());
+                            String res = result.toString();
+                            LatLng location = null;
+                            Toast.makeText(QRScanActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+                            viewProfile = "";
+                            onUpload.show();
+                            myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, null, user, QRScanActivity.this);
+                            //QRCode myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, user, QRScanActivity.this);
+                            myCode.uploadQRCode();
+                        }
                     }
                 });
             }
