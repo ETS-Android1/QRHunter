@@ -22,6 +22,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -81,6 +83,20 @@ public class DisplayCodeFragment extends DialogFragment {
     }
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     Uri uri;
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null)
+        {
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+            dialog.getWindow().setLayout(width, height);
+        }
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
@@ -88,6 +104,7 @@ public class DisplayCodeFragment extends DialogFragment {
         dialog.getWindow().setTitle(message);
         //not working
         dialog.setCanceledOnTouchOutside(true);
+        setStyle(STYLE_NO_FRAME, android.R.style.Theme_Holo_Light);
         return dialog;
     }
 
@@ -107,6 +124,14 @@ public class DisplayCodeFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_display_code, null);
         qrCodeImage = (ImageView)view.findViewById(R.id.qr_code_profile);
         textView = (TextView) view.findViewById(R.id.message);
+        Button exit = (Button) view.findViewById(R.id.exit);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDialog().dismiss();
+            }
+        });
+        getActivity(). getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         return view;
     }
 }
