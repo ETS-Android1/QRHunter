@@ -51,14 +51,14 @@ public class PlayerProfile extends BaseNavigatableActivity {
 
     public void get_individual_token() {
         String  uniqueId = "QRHUNTERTOKEN:" + UUID.randomUUID().toString();
-        firestore.collection("User").whereEqualTo("secure_token", uniqueId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        firestore.collection("User").whereEqualTo("uniqueLoginHash", uniqueId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (!queryDocumentSnapshots.isEmpty()) {
                     get_individual_token();
                 } else {
 
-                    user.update("secure_token", uniqueId).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    user.update("uniqueLoginHash", uniqueId).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(PlayerProfile.this,"token generated",Toast.LENGTH_SHORT).show();
