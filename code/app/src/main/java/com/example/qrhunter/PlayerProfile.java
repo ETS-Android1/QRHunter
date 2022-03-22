@@ -10,11 +10,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,15 +28,11 @@ import java.util.Map;
 public class PlayerProfile extends BaseNavigatableActivity {
 
     TextView ProfileName, Total, Scanned, Highest, Lowest, RankOfTotal, RankOfScanned, RankOfHighest;
-    Button generate_button;
     RecyclerView recyclerView;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     ArrayList<String> codes = new ArrayList<>();
     PlayerProfileAdapter adapter;
     private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
-
-
-
 
     @Override
     protected int getLayoutResourceId() {
@@ -64,16 +56,11 @@ public class PlayerProfile extends BaseNavigatableActivity {
         RankOfTotal = findViewById(R.id.rankPlayer1);
         RankOfScanned =  findViewById(R.id.rankPlayer2);
         RankOfHighest = findViewById(R.id.rankPlayer3);
-        generate_button = findViewById(R.id.generate_button);
 
         getData();
 
     }
-    public void generate_token(View view){
-        if  (view.getId()==R.id.generate_button){
-            Toast.makeText(this,"token generated",Toast.LENGTH_SHORT).show();
-        }
-    }
+
     /**
      * gets the data of user from the database
      */
@@ -125,7 +112,6 @@ public class PlayerProfile extends BaseNavigatableActivity {
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         return sharedPref.getString("USERNAME-key", "default-empty-string");
     }
-
 
 
 }

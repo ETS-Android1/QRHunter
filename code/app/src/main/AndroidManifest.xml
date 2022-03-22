@@ -72,6 +72,9 @@
             android:name=".PlayerProfile"
             android:exported="false" />
         <activity
+            android:name=".LeaderBoard"
+            android:exported="false"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
