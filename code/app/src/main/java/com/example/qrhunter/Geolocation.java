@@ -1,5 +1,7 @@
 package com.example.qrhunter;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -43,6 +45,7 @@ public class Geolocation {
         data.put("location", new GeoPoint(location.latitude, location.longitude));
         data.put("address", address);
         data.put("scan", scan);
+        Log.i("LOCATION ID", locationRef.getId());
         locationRef.set(data).addOnCompleteListener(l);
     }
     /**
@@ -102,7 +105,7 @@ public class Geolocation {
                                 return;
                             }
                             HashMap hashmapScan = (HashMap) task.getResult().getData();
-                            DocumentReference referenceToCode = (DocumentReference) hashmapScan.get("qrcode");
+                            DocumentReference referenceToCode = (DocumentReference) hashmapScan.get("qrCode");
                             if(referenceToCode == null) { return; }
                             referenceToCode.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
