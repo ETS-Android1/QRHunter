@@ -287,21 +287,26 @@ public class MapActivity extends BaseNavigatableActivity implements GeolocationL
         HashMap hashMapCode = (HashMap) hashMapSnapshot.getData();
         GeoPoint geopoint = (GeoPoint) hashmaplocation.get("location");
         try {
+            if (markers.get(geopoint.getLatitude()) != null && markers.get(geopoint.getLatitude()).get(geopoint.getLongitude()) != null
+                && markers.get(geopoint.getLatitude()).get(geopoint.getLongitude()).get(hashMapSnapshot.getId()) != null) {
+            // TODO SAME LOCATION, SAME QRCODE
+            }
+            else {
                 MarkerOptions options = new MarkerOptions()
                         .position(new LatLng(geopoint.getLatitude(), geopoint.getLongitude()))
-                        .title(("Lng: " + String.valueOf( geopoint.getLongitude()) + "\nLat: " + String.valueOf(geopoint.getLatitude())))
-                                .snippet("Score: " + hashMapCode.get("score"));
+                        .title(("Lng: " + String.valueOf(geopoint.getLongitude()) + "\nLat: " + String.valueOf(geopoint.getLatitude())))
+                        .snippet("Score: " + hashMapCode.get("score"));
                 HashMap idsHashed = new HashMap<String, MarkerOptions>() {{
                     put(hashMapSnapshot.getId(), options);
                 }};
-                markers.put(geopoint.getLatitude(),new HashMap<Double, HashMap<String, MarkerOptions>>() {{
+                markers.put(geopoint.getLatitude(), new HashMap<Double, HashMap<String, MarkerOptions>>() {{
                     put(geopoint.getLongitude(), idsHashed);
                 }});
                 boolean flag = false;
-                if ( hashMapCode.get("scanners") != null) {
+                if (hashMapCode.get("scanners") != null) {
                     ArrayList<DocumentReference> scanners = (ArrayList<DocumentReference>) hashMapCode.get("scanners");
                     for (DocumentReference el : scanners) {
-                        if(el == null) {
+                        if (el == null) {
                             continue;
                         }
                         if (el.getId().toString().equals(loadData())) {
@@ -310,13 +315,14 @@ public class MapActivity extends BaseNavigatableActivity implements GeolocationL
                         }
                     }
                 }
-                if(flag) {
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                } else {
+                if (flag) {
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                } else {
+                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 }
-                Marker m  =map.addMarker(options);
-                codeMap.put(m,hashMapSnapshot);
+                Marker m = map.addMarker(options);
+                codeMap.put(m, hashMapSnapshot);
+            }
         } catch (Exception e) {
             String msg = e.getMessage();
             Log.e("MAPERROR", msg);

@@ -99,7 +99,7 @@ public class QRCode {
                     listener.onQrUploadFail();
                 });
             } else {
-                qrCodeRef.update("scanners", FieldValue.arrayUnion(d.getData().get("scanners")));
+                qrCodeRef.update("scanners", FieldValue.arrayUnion(player));
                 listener.onQrUpload(qrCodeRef);
             }
         }
