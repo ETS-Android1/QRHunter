@@ -1,12 +1,15 @@
 package com.example.qrhunter;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,6 +47,7 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
@@ -63,11 +67,12 @@ interface GeolocationListener {
 public class MapActivity extends BaseNavigatableActivity implements GeolocationListener, OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener {
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private HashMap<Double, HashMap<Double, HashMap<String, MarkerOptions>>> markers = new HashMap<>();
-    private HashMap<MarkerOptions, Double> count = new HashMap<>();
+    private HashMap<Marker, DocumentSnapshot> codeMap = new HashMap<>();
     private GoogleMap map;
     private LinearLayout infoLayout;
     private FirebaseFirestore db;
     private FusedLocationProviderClient fusedLocationClient;
+    private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
 
 
     @Override
@@ -241,9 +246,20 @@ public class MapActivity extends BaseNavigatableActivity implements GeolocationL
         infoLayout.setVisibility(View.VISIBLE);
         TextView score = (TextView) findViewById(R.id.score);
         TextView address = (TextView) findViewById(R.id.address);
-        score.setText(marker.getSnippet());
+        TextView num_scanners = (TextView) findViewById(R.id.number_of_scanners);
         score.setText(marker.getSnippet());
         address.setText(marker.getTitle());
+        HashMap hashMapCode = (HashMap) codeMap.get(marker).getData();
+        if(hashMapCode.get("scanners")!= null) {
+            num_scanners.setText("Number of Scanners:" + String.valueOf(((ArrayList<DocumentReference>) hashMapCode.get("scanners")).size()));
+        } else {
+            num_scanners.setText("Number of Scanners: 0");
+        }
+        ImageView qrCodeImage = findViewById(R.id.imageView);
+        if (hashMapCode.containsKey("image")) {
+            new ImageFile(qrCodeImage)
+                    .execute((String) hashMapCode.get("image"));
+        }
         return false;
     }
 
@@ -271,28 +287,48 @@ public class MapActivity extends BaseNavigatableActivity implements GeolocationL
         HashMap hashMapCode = (HashMap) hashMapSnapshot.getData();
         GeoPoint geopoint = (GeoPoint) hashmaplocation.get("location");
         try {
-            if (markers.get(geopoint.getLatitude()) != null && markers.get(geopoint.getLatitude()).get(geopoint.getLongitude()) != null
-                    && markers.get(geopoint.getLatitude()).get(geopoint.getLongitude()).get(hashMapSnapshot.getId()) != null) {
-                // TODO SAME LOCATION, SAME QRCODE
-            }
-            else{
                 MarkerOptions options = new MarkerOptions()
                         .position(new LatLng(geopoint.getLatitude(), geopoint.getLongitude()))
-                        .title((String) hashmaplocation.get("address")).snippet("Count: 1" + " Score: " + hashMapCode.get("score"));
+                        .title(("Lng: " + String.valueOf( geopoint.getLongitude()) + "\nLat: " + String.valueOf(geopoint.getLatitude())))
+                                .snippet("Score: " + hashMapCode.get("score"));
                 HashMap idsHashed = new HashMap<String, MarkerOptions>() {{
-                    put((String) hashMapSnapshot.getId(), options);
+                    put(hashMapSnapshot.getId(), options);
                 }};
                 markers.put(geopoint.getLatitude(),new HashMap<Double, HashMap<String, MarkerOptions>>() {{
                     put(geopoint.getLongitude(), idsHashed);
                 }});
-                count.put(options, Double.valueOf(1));
-                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-                map.addMarker(options);
-            }
+                boolean flag = false;
+                if ( hashMapCode.get("scanners") != null) {
+                    ArrayList<DocumentReference> scanners = (ArrayList<DocumentReference>) hashMapCode.get("scanners");
+                    for (DocumentReference el : scanners) {
+                        if(el == null) {
+                            continue;
+                        }
+                        if (el.getId().toString().equals(loadData())) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+                if(flag) {
+                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                } else {
+                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                }
+                Marker m  =map.addMarker(options);
+                codeMap.put(m,hashMapSnapshot);
         } catch (Exception e) {
             String msg = e.getMessage();
             Log.e("MAPERROR", msg);
         }
+    }
+    /**
+     * loads USERNAME from SharedPreferences
+     * @return username used to login
+     */
+    public String loadData() {
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        return sharedPref.getString("USERNAME-key", "default-empty-string");
     }
 
 }
