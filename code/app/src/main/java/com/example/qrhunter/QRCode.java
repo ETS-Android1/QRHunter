@@ -81,11 +81,14 @@ public class QRCode {
         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
             DocumentSnapshot d = task.getResult();
             Map<String, Object> data = new HashMap<>();
+            ArrayList<DocumentReference> dr = new ArrayList<>();
+            dr.add(player);
             Long tsLong = System.currentTimeMillis()/1000;
             player.update("codes", FieldValue.arrayUnion(qrCodeRef));
             data.put("score", ScoringSystem.calculateScore(uniqueHash));
             data.put("timeCreated", tsLong);
             data.put("createdBy", player);
+            data.put("scanners",player);
             data.put("scans", new ArrayList<DocumentReference>());
             if (!d.exists()) {
                 qrCodeRef.set(data).addOnSuccessListener(
@@ -96,6 +99,7 @@ public class QRCode {
                     listener.onQrUploadFail();
                 });
             } else {
+                qrCodeRef.update("scanners", FieldValue.arrayUnion(player));
                 listener.onQrUpload(qrCodeRef);
             }
         }

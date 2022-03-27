@@ -47,7 +47,7 @@ public class ScanCompleteDialog extends DialogFragment {
     private boolean location_enabled = false;
     private OnCompleteListener l;
     private Double score = 0.0;
-
+    private String viewProfile;
     public ScanCompleteDialog() {
         // Required empty public constructor
     }
@@ -98,6 +98,7 @@ public class ScanCompleteDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the Builder class for convenient dialog construction
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            viewProfile = ((QRScanActivity) getActivity()).getViewProfile();
             builder.setMessage("You scored " + Double.valueOf(this.getArguments().getDouble(ARG_PARAM2, 0.0)).toString() + "\nLocation was" + (this.getArguments().getBoolean(ARG_PARAM1) ? "" : " not") + " recorded")
                     .setPositiveButton("Take Photo", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -116,6 +117,16 @@ public class ScanCompleteDialog extends DialogFragment {
 
                         }
                     });
+            if(viewProfile.length() > 0) {
+                builder.setNeutralButton("View " + viewProfile + "'s Profile", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(((QRScanActivity) getActivity()), OtherProfileView.class);
+                        intent.putExtra("leaderBoardUserNameIntent", viewProfile);
+                        startActivity(intent);
+                    }
+                });
+            }
             // Create the AlertDialog object and return it
             return builder.create();
     }

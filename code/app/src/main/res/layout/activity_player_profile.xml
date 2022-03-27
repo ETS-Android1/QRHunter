@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PlayerProfile"
@@ -112,13 +110,22 @@
         android:id="@+id/generate_button"
         android:onClick="generate_token"/>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <Button
+        android:id="@+id/generate_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/lowest"
+        android:layout_marginTop="63dp"
+        android:onClick="generate_status"
+        android:text="Generate Status" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPlayerProfile"
+        android:layout_width="316dp"
+        android:layout_height="325dp"
         android:layout_below="@+id/generate_button"
-        android:layout_marginTop="10dp"
         android:layout_alignParentBottom="true"
-        android:id="@+id/recyclerViewPlayerProfile"/>
+        android:layout_marginTop="76dp" />
 
 
 </RelativeLayout>
