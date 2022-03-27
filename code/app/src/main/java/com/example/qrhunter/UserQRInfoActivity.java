@@ -107,15 +107,11 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         int scans = extras.getInt("scans");
 
         points.setText(score.toString());
-        if (scans > 1) {
-            scanned.setImageResource(R.drawable.check);
-        } else {
-            scanned.setImageResource(R.drawable.not_check);
-        }
 
 
         // finding the user using local storage
         SharedPreferences sharedPref = getSharedPreferences("USERNAME-sharedPrefs", MODE_PRIVATE);
+        String user = sharedPref.getString("USERNAME-key", null);
 
 
         /* from eclass
@@ -167,7 +163,6 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
             public void onClick(View view) {
                 // we add to the database based on the user passed from the previous activity
                 String commentData = addComment.getText().toString();
-                String user = sharedPref.getString("USERNAME-key", null);
                 if (commentData != "") {
                     commentDataList.add(new Comment(commentData));
 
@@ -236,15 +231,26 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                 {
                     if (doc.exists() && doc.getId().equals(hash)) {
                         SeenHelper seenHelper = doc.toObject(SeenHelper.class);
-                        for (DocumentReference seen: seenHelper.getScanners()) {
-                            seen.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    // update data and notify adapters of data update
-                                    seenDataList.add(task.getResult().getData().get("username").toString());
-                                    seenAdapter.notifyDataSetChanged();
-                                }
-                            });
+                        if (seenHelper.getScanners() != null) {
+                            for (DocumentReference seen: seenHelper.getScanners()) {
+                                seen.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        final String seenName = task.getResult().getData().get("username").toString();
+                                        seenHelper.getCreatedBy().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (seenName != task.getResult().getData().get("username").toString()) {
+                                                    scanned.setImageResource(R.drawable.check);
+                                                }
+                                            }
+                                        });
+                                        // update data and notify adapters of data update
+                                        seenDataList.add(seenName);
+                                        seenAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
                         }
                     }
                 }
