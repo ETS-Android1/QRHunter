@@ -52,6 +52,9 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
     private ListView commentList;
     private ArrayList<Comment> commentDataList;
     private ArrayAdapter<Comment> commentAdapter;
+    private ListView seenList;
+    private ArrayList<String> seenDataList;
+    private ArrayAdapter<String> seenAdapter;
     private FirebaseFirestore db;
 
     /**
@@ -91,9 +94,11 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         date = findViewById(R.id.QRDate);
         scanned = findViewById(R.id.QRScannedImage);
         points = findViewById(R.id.QRPoints);
-
+        seenList = findViewById(R.id.seenList);
 
         String[] commentsInDB;
+        seenDataList = new ArrayList<>();
+
 
         // finding the code
         Bundle extras = getIntent().getExtras();
@@ -191,7 +196,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             /**
-             * Here we update our data with database data
+             * Here we update our data with database data from comments collection
              *
              * @param value used for querying database
              * @param error exception for error functionality
@@ -199,6 +204,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 // Clear the old list
                 commentDataList.clear();
+
                 for(QueryDocumentSnapshot doc: value)
                 {
                     if (doc.exists() && doc.getId().equals(hash)) {
@@ -208,9 +214,40 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                         }
                     }
                 }
-                // add each of the comments to the commentData list from the database
 
-                commentAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
+                // notify adapters of data update
+                commentAdapter.notifyDataSetChanged();
+            }
+        });
+
+        collectionQRReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            /**
+             * Here we update our data with database data from qrcodes collection
+             *
+             * @param value used for querying database
+             * @param error exception for error functionality
+             */
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                // Clear the old list
+                seenDataList.clear();
+
+                for(QueryDocumentSnapshot doc: value)
+                {
+                    if (doc.exists() && doc.getId().equals(hash)) {
+                        SeenHelper seenHelper = doc.toObject(SeenHelper.class);
+                        for (DocumentReference seen: seenHelper.getScanners()) {
+                            seen.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    // update data and notify adapters of data update
+                                    seenDataList.add(task.getResult().getData().get("username").toString());
+                                    seenAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    }
+                }
             }
         });
 
@@ -230,5 +267,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
 
         commentAdapter = new CommentListAdapter(this, commentDataList);
         commentList.setAdapter(commentAdapter);
+        seenAdapter = new ArrayAdapter<>(this, R.layout.seen_content, seenDataList);
+        seenList.setAdapter(seenAdapter);
     }
 }
