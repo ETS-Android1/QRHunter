@@ -119,6 +119,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("comments");
         final CollectionReference collectionQRReference = db.collection("qrcodes");
+        final String TAG = "UserQRInfoActivity";
 
 
         back = findViewById(R.id.backQR);
@@ -133,21 +134,24 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
              */
             @Override
             public void onClick(View view) {
-                collectionQRReference.document(hash)
+                collectionQRReference
+                        //how are we passing the QRCode in
+                        .document()
                         .delete()
+                        //.set(data)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 // These are a method which gets executed when the task is succeeded
 
-                                Log.d("deleted QR", "QRCode has been deleted successfully!");
+                                Log.d(TAG, "QRCode has been deleted successfully!");
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // These are a method which gets executed if there’s any problem
-                                Log.d("deleted QR", "QRCode could not be deleted!" + e.toString());
+                                Log.d(TAG, "QRCode could not be deleted!" + e.toString());
                             }
                         });
             }
