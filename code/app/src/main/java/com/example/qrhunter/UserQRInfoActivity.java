@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -118,9 +119,8 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         by https://eclass.srv.ualberta.ca/mod/page/view.php?id=5825425 */
         db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("comments");
-        final CollectionReference collectionQRReference = db.collection("qrcodes");
+        final CollectionReference collectionQRReference = db.collection("User");
         final String TAG = "UserQRInfoActivity";
-
 
         back = findViewById(R.id.backQR);
         delete = findViewById(R.id.deleteQR);
@@ -129,29 +129,31 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
 
         delete.setOnClickListener(new View.OnClickListener() {
             /**
-             * This method deletes the following QR code from the database and updates the list
+             * This method deletes the following QR code from the database for the current user
              * @param view
              */
             @Override
             public void onClick(View view) {
-                collectionQRReference
-                        //how are we passing the QRCode in
-                        .document()
-                        .delete()
-                        //.set(data)
+                String user = sharedPref.getString("USERNAME-key", null);
+                String deleteCode = "/qrcodes/" + hash;
+
+                collectionQRReference.document(user)
+                        .update("codes", FieldValue.arrayRemove(deleteCode))
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 // These are a method which gets executed when the task is succeeded
 
-                                Log.d(TAG, "QRCode has been deleted successfully!");
+                                Log.d("deleted QR", "QRCode has been deleted successfully!");
+                                Toast.makeText(getApplicationContext(),"QRCode has been deleted successfully!",Toast.LENGTH_SHORT).show();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // These are a method which gets executed if there’s any problem
-                                Log.d(TAG, "QRCode could not be deleted!" + e.toString());
+                                Log.d("deleted QR", "QRCode could not be deleted!" + e.toString());
+                                Toast.makeText(getApplicationContext(),"QRCode could not be deleted!",Toast.LENGTH_SHORT).show();
                             }
                         });
             }
