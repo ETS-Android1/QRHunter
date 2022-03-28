@@ -73,7 +73,7 @@
                     android:id="@+id/QRScanned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="scanned: "
+                    android:text="scanned by others: "
                     android:textSize="20sp">
                 </TextView>
 
@@ -97,6 +97,19 @@
             android:text="points: 0">
         </TextView>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="0.1">
+        <ListView
+            android:id="@+id/seenList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
     </LinearLayout>
 
     <LinearLayout

@@ -53,6 +53,9 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
     private ListView commentList;
     private ArrayList<Comment> commentDataList;
     private ArrayAdapter<Comment> commentAdapter;
+    private ListView seenList;
+    private ArrayList<String> seenDataList;
+    private ArrayAdapter<String> seenAdapter;
     private FirebaseFirestore db;
 
     /**
@@ -92,9 +95,11 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         date = findViewById(R.id.QRDate);
         scanned = findViewById(R.id.QRScannedImage);
         points = findViewById(R.id.QRPoints);
-
+        seenList = findViewById(R.id.seenList);
 
         String[] commentsInDB;
+        seenDataList = new ArrayList<>();
+
 
         // finding the code
         Bundle extras = getIntent().getExtras();
@@ -103,15 +108,11 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         int scans = extras.getInt("scans");
 
         points.setText(score.toString());
-        if (scans > 1) {
-            scanned.setImageResource(R.drawable.check);
-        } else {
-            scanned.setImageResource(R.drawable.not_check);
-        }
 
 
         // finding the user using local storage
         SharedPreferences sharedPref = getSharedPreferences("USERNAME-sharedPrefs", MODE_PRIVATE);
+        String user = sharedPref.getString("USERNAME-key", null);
 
 
         /* from eclass
@@ -168,7 +169,6 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
             public void onClick(View view) {
                 // we add to the database based on the user passed from the previous activity
                 String commentData = addComment.getText().toString();
-                String user = sharedPref.getString("USERNAME-key", null);
                 if (commentData != "") {
                     commentDataList.add(new Comment(commentData));
 
@@ -179,7 +179,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                                 collectionReference.document(hash).update("comments", FieldValue.arrayUnion(commentData));
                             } else {
                                 List<String> newComments = new ArrayList<String>();
-                                newComments.add(commentData);;
+                                newComments.add(commentData);
                                 CommentHelper newComment = new CommentHelper(newComments);
                                 collectionReference.document(hash).set(newComment);
                             }
@@ -197,7 +197,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             /**
-             * Here we update our data with database data
+             * Here we update our data with database data from comments collection
              *
              * @param value used for querying database
              * @param error exception for error functionality
@@ -205,6 +205,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 // Clear the old list
                 commentDataList.clear();
+
                 for(QueryDocumentSnapshot doc: value)
                 {
                     if (doc.exists() && doc.getId().equals(hash)) {
@@ -214,9 +215,51 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                         }
                     }
                 }
-                // add each of the comments to the commentData list from the database
 
-                commentAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
+                // notify adapters of data update
+                commentAdapter.notifyDataSetChanged();
+            }
+        });
+
+        collectionQRReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            /**
+             * Here we update our data with database data from qrcodes collection
+             *
+             * @param value used for querying database
+             * @param error exception for error functionality
+             */
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                // Clear the old list
+                seenDataList.clear();
+
+                for(QueryDocumentSnapshot doc: value)
+                {
+                    if (doc.exists() && doc.getId().equals(hash)) {
+                        SeenHelper seenHelper = doc.toObject(SeenHelper.class);
+                        if (seenHelper.getScanners() != null) {
+                            for (DocumentReference seen: seenHelper.getScanners()) {
+                                seen.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        final String seenName = task.getResult().getData().get("username").toString();
+                                        seenHelper.getCreatedBy().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (seenName != task.getResult().getData().get("username").toString()) {
+                                                    scanned.setImageResource(R.drawable.check);
+                                                }
+                                            }
+                                        });
+                                        // update data and notify adapters of data update
+                                        seenDataList.add(seenName);
+                                        seenAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
             }
         });
 
@@ -236,5 +279,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
 
         commentAdapter = new CommentListAdapter(this, commentDataList);
         commentList.setAdapter(commentAdapter);
+        seenAdapter = new ArrayAdapter<>(this, R.layout.seen_content, seenDataList);
+        seenList.setAdapter(seenAdapter);
     }
 }
