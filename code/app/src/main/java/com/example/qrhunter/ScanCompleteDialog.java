@@ -48,6 +48,8 @@ public class ScanCompleteDialog extends DialogFragment {
     private OnCompleteListener l;
     private Double score = 0.0;
     private String viewProfile;
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    Uri uri;
     public ScanCompleteDialog() {
         // Required empty public constructor
     }
@@ -73,8 +75,6 @@ public class ScanCompleteDialog extends DialogFragment {
         super.onAttach(context);
 
     }
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    Uri uri;
     private ActivityResultLauncher<Uri> mGetContent =  registerForActivityResult(
             new ActivityResultContracts.TakePicture(),
             new ActivityResultCallback<Boolean>() {
@@ -94,6 +94,7 @@ public class ScanCompleteDialog extends DialogFragment {
                     // do what you need with the uri here ...
                 }
             });
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the Builder class for convenient dialog construction

@@ -47,8 +47,6 @@ import java.util.Objects;
  */
 public class DisplayCodeFragment extends DialogFragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "image_bitmap";
     private Bitmap image_bitmap;
     private static final String ARG_PARAM2 = "Message";

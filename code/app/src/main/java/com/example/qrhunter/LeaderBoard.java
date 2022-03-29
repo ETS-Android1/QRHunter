@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
+// the leaderboard activity displayed to users
 public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardAdapter.OnItemListener {
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -61,6 +61,10 @@ public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardA
 
     }
 
+    /**
+     * the options menu creator
+     * @param menu parent menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -87,24 +91,39 @@ public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardA
 
     }
 
+    /**
+     * sort by highest score
+     * @param view parent view
+     */
     public void set_rank_highest_score(View view) {
         rank.setText("USER RANK BY SCORE: ");
         leaderBoardHolders.clear();
         getFireStoreContent("TOTAL");
     }
 
+    /**
+     * sort by highest code
+     * @param view parent view
+     */
     public void set_rank_highest_code(View view) {
         rank.setText("USER RANK BY HIGHEST CODE: ");
         leaderBoardHolders.clear();
         getFireStoreContent("HIGHEST");
     }
 
+    /**
+     * sort by number of codes scanned
+     * @param view parent view
+     */
     public void set_rank_number_codes_scanned(View view) {
         rank.setText("USER RANK BY NUMBER SCANS: ");
         leaderBoardHolders.clear();
         getFireStoreContent("AMOUNT");
     }
-
+    /**
+     * this is called to get the users from firestore
+     * @param method what to sort by
+     */
     public void getFireStoreContent(String method){
         firestore.collection("User").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -196,6 +215,9 @@ public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardA
         });
     }
 
+    /**
+     * this is called to sort the leaderboard holders
+     */
     private void sortUsers() {
         Collections.sort(leaderBoardHolders, Collections.reverseOrder());
         for(int i = 0; i<leaderBoardHolders.size(); i++){
