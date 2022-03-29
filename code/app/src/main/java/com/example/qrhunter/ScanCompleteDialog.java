@@ -71,7 +71,6 @@ public class ScanCompleteDialog extends DialogFragment {
         super.onAttach(context);
 
     }
-
     private ActivityResultLauncher<Uri> mGetContent =  registerForActivityResult(
             new ActivityResultContracts.TakePicture(),
             new ActivityResultCallback<Boolean>() {
@@ -91,6 +90,7 @@ public class ScanCompleteDialog extends DialogFragment {
                     // do what you need with the uri here ...
                 }
             });
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the Builder class for convenient dialog construction

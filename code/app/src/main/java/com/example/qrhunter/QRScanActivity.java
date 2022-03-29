@@ -87,7 +87,11 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
     private String USERNAME;
     private QRCode myCode;
     private String viewProfile = "";
-
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
+    Uri uri;
+    /**
+     * used by the fragment to get message
+     */
     public String getViewProfile () {
       return viewProfile;
     };
@@ -131,6 +135,9 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
         checkLastLocation();
     }
 
+    /**
+     * checks the last location of the user availability
+     */
     public  void checkLastLocation() {
         if (ActivityCompat.checkSelfPermission(QRScanActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(QRScanActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -141,6 +148,10 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
                     MY_PERMISSIONS_REQUEST_LOCATION);
         }
     }
+
+    /**
+     * gets the last location of the user
+     */
     public void getLastLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -276,6 +287,10 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
         super.onPause();
     }
 
+    /**
+     * used by the fragment to set image uri
+     * @param uri the image uri
+     */
     public void setUri (Uri uri) {
         this.uri = uri;
     }
@@ -285,8 +300,7 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
         onUpload.dismiss();
         onFail.show();
     }
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    Uri uri;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
