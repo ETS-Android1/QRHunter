@@ -36,6 +36,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -58,7 +59,9 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
     private ListView seenList;
     private ArrayList<String> seenDataList;
     private ArrayAdapter<String> seenAdapter;
-    private FirebaseFirestore db;
+    private FirebaseFirestore  db = FirebaseFirestore.getInstance();
+    final CollectionReference collectionUserReference = db.collection("User");
+    ImageView scanned;
 
     public void name_clicked(View v) {
         TextView t = (TextView) v;
@@ -97,11 +100,9 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         ImageButton sendComment;
         TextView loc;
         TextView date;
-        ImageView scanned;
         TextView points;
 
         loc = findViewById(R.id.QRGeolocation);
-        date = findViewById(R.id.QRDate);
         scanned = findViewById(R.id.QRScannedImage);
         points = findViewById(R.id.QRPoints);
         seenList = findViewById(R.id.seenList);
@@ -127,12 +128,10 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         /* from eclass
         at https://github.com/AbdulAli/FirestoreTutorialW22/
         by https://eclass.srv.ualberta.ca/mod/page/view.php?id=5825425 */
-        db = FirebaseFirestore.getInstance();
         final CollectionReference collectionReference = db.collection("comments");
-        final CollectionReference collectionUserReference = db.collection("User");
         final CollectionReference collectionQrReference = db.collection("qrcodes");
         final String TAG = "UserQRInfoActivity";
-
+        TextView locationText = (TextView) findViewById(R.id.QRGeolocation);
         collectionQrReference.document(hash).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -140,26 +139,19 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                     new ImageFile(findViewById(R.id.qr_info_image))
                             .execute((String) documentSnapshot.getData().get("image"));
                 }
+                if (documentSnapshot.getData().containsKey("location")) {
+                    DocumentReference location = (DocumentReference) documentSnapshot.getData().get("location");
+                    location.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            GeoPoint thisLocation = documentSnapshot.getGeoPoint("location");
+                            locationText.setText("Lat: " + thisLocation.getLatitude() + "\nLng: " + thisLocation.getLongitude());
+                        }
+                    });
+                }
             }
         });
-        ArrayList<String> scanners = extras.getStringArrayList("scanners");
-        for (String seen: scanners) {
-            collectionUserReference.document( seen).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (!task.isSuccessful() || !task.getResult().exists()) {
-                        return;
-                    }
-                    final String seenName = task.getResult().getData().get("username").toString();
-                    if (seenName != task.getResult().getData().get("username").toString()) {
-                        scanned.setImageResource(R.drawable.check);
-                    }
-                    // update data and notify adapters of data update
-                    seenDataList.add(seenName);
-                    seenAdapter.notifyDataSetChanged();
-                }
-            });
-        }
+
         back = findViewById(R.id.backQR);
         delete = findViewById(R.id.deleteQR);
         addComment = findViewById(R.id.addComment);
@@ -318,5 +310,29 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         commentList.setAdapter(commentAdapter);
         seenAdapter = new ArrayAdapter<>(this, R.layout.seen_content, seenDataList);
         seenList.setAdapter(seenAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ArrayList<String> scanners = getIntent().getExtras().getStringArrayList("scanners");
+        for (String seen: scanners) {
+            collectionUserReference.document( seen).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (!task.isSuccessful() || !task.getResult().exists()) {
+                        return;
+                    }
+                    final String seenName = task.getResult().getData().get("username").toString();
+                    if (seenName != task.getResult().getData().get("username").toString()) {
+                        scanned.setImageResource(R.drawable.check);
+                    }
+                    // update data and notify adapters of data update
+                    Integer index = seenDataList.indexOf(seenName);
+                    if(index < 0) { seenDataList.add(seenName); }
+                    seenAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 }

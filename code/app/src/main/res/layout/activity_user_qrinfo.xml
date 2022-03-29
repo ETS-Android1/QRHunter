@@ -53,17 +53,8 @@
                 android:id="@+id/QRGeolocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="geolocation"
-                android:textSize="20sp">
-            </TextView>
-
-            <TextView
-                android:id="@+id/QRDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="date"
-                android:textSize="20sp">
-            </TextView>
+                android:text="No location available"
+                android:textSize="20sp"></TextView>
 
             <LinearLayout
                 android:layout_width="wrap_content"
