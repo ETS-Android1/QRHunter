@@ -47,7 +47,6 @@ import java.util.Objects;
  */
 public class DisplayCodeFragment extends DialogFragment {
 
-    private static final String ARG_PARAM1 = "image_bitmap";
     private Bitmap image_bitmap;
     private static final String ARG_PARAM2 = "Message";
     private String message;
@@ -79,8 +78,7 @@ public class DisplayCodeFragment extends DialogFragment {
         message = ((PlayerProfile) getActivity()).getMessage();
 
     }
-    private FirebaseStorage storage = FirebaseStorage.getInstance();
-    Uri uri;
+
 
     @Override
     public void onStart()

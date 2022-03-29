@@ -123,6 +123,11 @@ public class ListCodesActivity extends BaseNavigatableActivity implements Adapte
         intent.putExtra("score", code.getScore());
         intent.putExtra("scans", code.getNumScans());
         intent.putExtra("hash", code.getUniqueHash());
+        ArrayList<String> ids = new ArrayList<>();
+        for (DocumentReference el : code.scanners) {
+            ids.add(el.getId());
+        }
+        intent.putExtra("scanners", ids);
         startActivity(intent);
     }
 }

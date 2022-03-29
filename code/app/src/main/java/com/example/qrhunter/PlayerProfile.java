@@ -44,17 +44,30 @@ public class PlayerProfile extends BaseNavigatableActivity {
     ArrayList<String> codes = new ArrayList<>();
     PlayerProfileAdapter adapter;
     DocumentReference user;
-    Map<String, Object> userData;
     private Bitmap myMap;
     private String message;
     private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
 
+    /**
+     *
+     * @return the current bitmap
+     */
     public Bitmap getMap() {
         return myMap;
     }
+
+    /**
+     *
+     * @return the current message
+     */
     public String getMessage() {
         return message;
     }
+
+    /**
+     *
+     * @param content the string to make into a code
+     */
     public void writeQrCode(String content) {
         QRCodeWriter writer = new QRCodeWriter();
         try {
@@ -84,6 +97,9 @@ public class PlayerProfile extends BaseNavigatableActivity {
         return R.id.profile;
     }
 
+    /**
+     * gets a login token for a user
+     */
     public void get_individual_token() {
         String  uniqueId = "QRHUNTERTOKEN:" + UUID.randomUUID().toString();
         firestore.collection("User").whereEqualTo("uniqueLoginHash", uniqueId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -108,6 +124,10 @@ public class PlayerProfile extends BaseNavigatableActivity {
         });
     }
 
+    /**
+     * gets a status code for the user
+     * @param view parent view
+     */
     public void generate_status(View view){
         if  (view.getId()==R.id.generate_status){
             String  uniqueId = "QRHUNTERSTATUS:" + loadData();
@@ -118,6 +138,10 @@ public class PlayerProfile extends BaseNavigatableActivity {
         }
     }
 
+    /**
+     * gets a token code for the user
+     * @param view parent view
+     */
     public void generate_token(View view){
         if  (view.getId()==R.id.generate_button){
             get_individual_token();

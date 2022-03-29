@@ -43,10 +43,6 @@ public class ScanCompleteDialog extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "location_enabled";
     private static final String ARG_PARAM2 = "score";
-    private static final String ARG_PARAM3 = "complete_listener";
-    private boolean location_enabled = false;
-    private OnCompleteListener l;
-    private Double score = 0.0;
     private String viewProfile;
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     Uri uri;
