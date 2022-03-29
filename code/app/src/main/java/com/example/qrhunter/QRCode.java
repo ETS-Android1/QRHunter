@@ -31,6 +31,7 @@ public class QRCode {
     ArrayList<DocumentReference> scans = new ArrayList<>();
     private DocumentReference qrCodeRef;
     private  DocumentReference player;
+    ArrayList<DocumentReference> scanners = new ArrayList<>();
     @Nullable
     ListensToQrUpload listener;
 
@@ -52,15 +53,26 @@ public class QRCode {
      * @param qrCodeRef
      * a reference to the qr code that will be uploaded
      */
-    public QRCode(DocumentReference qrCodeRef, String uniqueHash, @Nullable ArrayList<DocumentReference> scans,DocumentReference player, @Nullable ListensToQrUpload listener) {
+    public QRCode(DocumentReference qrCodeRef, String uniqueHash,  @Nullable ArrayList<DocumentReference> scanners, @Nullable ArrayList<DocumentReference> scans,DocumentReference player, @Nullable ListensToQrUpload listener) {
         this.qrCodeRef = qrCodeRef;
         this.player = player;
         this.listener = listener;
         this.uniqueHash = uniqueHash;
         this.score = ScoringSystem.calculateScore(uniqueHash);
         this.scans = scans;
+        this.scanners = scanners;
+    }
+
+    public int getNumScanners() {
+        if (scanners == null) {
+            return 0;
+        }
+        return scanners.size();
     }
     public int getNumScans() {
+        if (scans == null) {
+            return 0;
+        }
         return scans.size();
     }
     public String getUniqueHash() {

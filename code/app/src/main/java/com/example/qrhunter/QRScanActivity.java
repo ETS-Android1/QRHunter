@@ -200,7 +200,7 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
                                         Toast.makeText(QRScanActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
                                         onUpload.show();
                                         viewProfile = profileName;
-                                        myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, null, user, QRScanActivity.this);
+                                        myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex,null, null, user, QRScanActivity.this);
                                         //QRCode myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, user, QRScanActivity.this);
                                         myCode.uploadQRCode();
 
@@ -216,7 +216,7 @@ public class QRScanActivity extends BaseNavigatableActivity implements ListensTo
                             Toast.makeText(QRScanActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
                             viewProfile = "";
                             onUpload.show();
-                            myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, null, user, QRScanActivity.this);
+                            myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, null, null, user, QRScanActivity.this);
                             //QRCode myCode = new QRCode(db.collection("qrcodes").document(sha256hex), sha256hex, user, QRScanActivity.this);
                             myCode.uploadQRCode();
                         }

@@ -33,7 +33,7 @@ public class TestCustomQRList {
         DocumentReference userReference = Mockito.mock(DocumentReference.class);
         String testHash = "testHash";
         ListensToQrUpload l = Mockito.mock(ListensToQrUpload.class);
-        list.addQR(new QRCode(mockReference, testHash,null, userReference, l ));
+        list.addQR(new QRCode(mockReference, testHash,null, null, userReference, l ));
         assertEquals(listSize+1,list.getCount());
     }
 }

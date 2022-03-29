@@ -27,6 +27,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -80,10 +82,18 @@ public class ListCodesActivity extends BaseNavigatableActivity implements Adapte
 
                 if(task.isSuccessful()){
                     for(QueryDocumentSnapshot document : task.getResult()) {
-                        QRCode myCode = new QRCode(document.getReference(),  (String) document.getId(), (ArrayList<DocumentReference>) document.getData().get("scans"), (DocumentReference)
+                        QRCode myCode = new QRCode(document.getReference(),  (String) document.getId(), (ArrayList<DocumentReference>) document.getData().get("scanners"), (ArrayList<DocumentReference>) document.getData().get("scans"), (DocumentReference)
                                 document.getData().get("createdBy"), null);
                         dummyQRlist.add(myCode);
                     }
+                    Collections.sort(dummyQRlist,  new Comparator<QRCode>(){
+
+                        public int compare(QRCode o1, QRCode o2)
+                        {
+                            return o2.score.compareTo(o1.score);
+                        }
+                    });
+
                     codeAdapter = new CustomQRList(ListCodesActivity.this, dummyQRlist);
                     QRCode.setAdapter(codeAdapter);
 

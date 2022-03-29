@@ -60,7 +60,7 @@ public class CustomQRList  extends ArrayAdapter<QRCode>{
         //TextView date = view.findViewById(R.id.date_text);
         TextView points= view.findViewById(R.id.points_text);
         TextView playerName = view.findViewById(R.id.player_text);
-        scanners.setText("Scanners: "+String.valueOf(codes.getNumScans()));
+        scanners.setText("Scanners: "+String.valueOf(codes.getNumScanners()));
         //date.setText("Time Created: "+String.valueOf( codes.getTime()));
         playerName.setText("Created By: "+ String.valueOf(codes.getPlayer().getId()));
         points.setText("Points: "+String.valueOf(codes.getScore()));
