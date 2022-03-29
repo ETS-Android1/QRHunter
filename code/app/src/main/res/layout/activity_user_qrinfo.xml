@@ -88,16 +88,36 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/QRPoints"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:textSize="35sp"
-            android:text="points: 0">
-        </TextView>
+            android:layout_weight="0.6"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/qr_info_image"
+                android:layout_width="192dp"
+                android:layout_height="69dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_qrcode" />
+
+            <TextView
+                android:id="@+id/QRPoints"
+                android:layout_width="192dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="points: 0"
+                android:textAlignment="center"
+                android:textSize="24sp"></TextView>
+        </LinearLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scanners" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -111,6 +131,12 @@
 
         </ListView>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Comments" />
 
     <LinearLayout
         android:layout_width="match_parent"
