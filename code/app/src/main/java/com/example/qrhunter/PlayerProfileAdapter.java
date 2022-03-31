@@ -32,7 +32,8 @@ public class PlayerProfileAdapter extends RecyclerView.Adapter<PlayerProfileAdap
 
     @Override
     public void onBindViewHolder(@NonNull PlayerProfileAdapter.ViewHolder holder, int position) {
-        holder.text.setText(codes.get(position));
+        //holder.text.setText(codes.get(position));
+        holder.text.setText("My QRCode "+(position+1)+": "+codes.get(position).substring(0, 5));
     }
 
     @Override
