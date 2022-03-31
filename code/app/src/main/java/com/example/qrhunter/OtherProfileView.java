@@ -7,11 +7,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,13 +33,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OtherProfileView extends BaseNavigatableActivity {
+public class OtherProfileView extends BaseNavigatableActivity implements AdapterView.OnItemClickListener {
 
     TextView ProfileName, Total, Scanned, Highest, Lowest, RankOfTotal, RankOfScanned, RankOfHighest;
     RecyclerView recyclerView;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    ArrayList<String> codes = new ArrayList<>();
-    PlayerProfileAdapter adapter;
+    ListView QRCode;
+    ArrayList<QRCode> codes = new ArrayList<>();
+    ArrayAdapter<QRCode> adapter;
     private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
 
 
@@ -55,14 +60,12 @@ public class OtherProfileView extends BaseNavigatableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        QRCode = findViewById(R.id.list_of_codes);
         ProfileName = findViewById(R.id.name);
         Total = findViewById(R.id.total);
         Scanned = findViewById(R.id.scan);
         Highest = findViewById(R.id.highest);
         Lowest = findViewById(R.id.lowest);
-        RankOfTotal = findViewById(R.id.rankPlayer1);
-        RankOfScanned =  findViewById(R.id.rankPlayer2);
-        RankOfHighest = findViewById(R.id.rankPlayer3);
 
         getData();
 
@@ -89,9 +92,14 @@ public class OtherProfileView extends BaseNavigatableActivity {
                                 if (!task.isSuccessful()) {
                                     return;
                                 }
-                                codes.add(task.getResult().getId());
+                                DocumentSnapshot document = task.getResult();
+                                QRCode myCode = new QRCode(document.getReference(), (String) document.getId(), (ArrayList<DocumentReference>) document.getData().get("scanners")
+                                        , (ArrayList<DocumentReference>) document.getData().get("scans"), (DocumentReference)
+                                        document.getData().get("createdBy"), null);
+                                codes.add(myCode);
                                 Scanned.setText("scanned: " + codes.size());
-                                initRecycleView();
+                                adapter = new CustomQRList(OtherProfileView.this, codes);;
+                                QRCode.setAdapter(adapter);
                             }
                         });
                     }
@@ -103,7 +111,9 @@ public class OtherProfileView extends BaseNavigatableActivity {
                 Highest.setText("highest: "+data.get("highest").toString());
                 Lowest.setText("lowest: "+data.get("lowest").toString());
                 Scanned.setText("scanned: " + codes.size());
-                initRecycleView();
+                adapter = new CustomQRList(OtherProfileView.this, codes);;
+                QRCode.setAdapter(adapter);
+                QRCode.setOnItemClickListener(OtherProfileView.this);
 
             }
         });
@@ -111,13 +121,27 @@ public class OtherProfileView extends BaseNavigatableActivity {
     }
 
     /**
-     * this function showing qr codes in recycler view
+     * Use this method to get info of the clicked item and swicthes to the UserQRInfoActivity intent
+     * @param adapterView
+     * @param view
+     * @param i
+     * @param l
      */
-    private void initRecycleView(){
-        recyclerView = findViewById(R.id.recyclerViewPlayerProfile);
-        adapter = new PlayerProfileAdapter(codes, this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        //use this to get info of the clicked item
+        // adapterView.getItemAtPosition(i);
+        Intent intent = new Intent(OtherProfileView.this, UserQRInfoActivity.class);
+        QRCode code = codes.get(i);
+        intent.putExtra("score", code.getScore());
+        intent.putExtra("scans", code.getNumScans());
+        intent.putExtra("hash", code.getUniqueHash());
+        ArrayList<String> ids = new ArrayList<>();
+        for (DocumentReference el : code.scanners) {
+            ids.add(el.getId());
+        }
+        intent.putExtra("scanners", ids);
+        startActivity(intent);
     }
     public String loadData() {
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);

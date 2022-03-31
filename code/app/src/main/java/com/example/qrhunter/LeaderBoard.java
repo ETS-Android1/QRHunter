@@ -203,8 +203,6 @@ public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardA
                                             }
                                         }
                                     } catch (Exception e) {
-                                        Map<String, Object> data = documentSnapshot.getData();
-                                        Log.w("Warn" , documentSnapshot.getData().toString());
                                     }
                                 }
                             });
