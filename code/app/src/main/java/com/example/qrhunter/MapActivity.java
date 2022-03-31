@@ -285,6 +285,9 @@ public class MapActivity extends BaseNavigatableActivity implements GeolocationL
      */
     public void processLocation(HashMap hashmaplocation, DocumentSnapshot hashMapSnapshot) {
         HashMap hashMapCode = (HashMap) hashMapSnapshot.getData();
+        if (hashMapCode == null || hashMapCode.isEmpty()) {
+            return;
+        }
         GeoPoint geopoint = (GeoPoint) hashmaplocation.get("location");
         try {
             if (markers.get(geopoint.getLatitude()) != null && markers.get(geopoint.getLatitude()).get(geopoint.getLongitude()) != null
