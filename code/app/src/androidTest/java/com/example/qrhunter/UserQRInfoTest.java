@@ -52,6 +52,23 @@ public class UserQRInfoTest {
         onView(withId(R.id.sendComment)).perform(click());
         onData(anything()).inAdapterView(withId(R.id.commentList)).atPosition(0).check(matches(isDisplayed()));
     }
+    /**
+     * We test if activity has delete button is started
+     */
+    @Test
+    public void deleteCheckTest() {
+        // we see if there is a delete button then we know that this is UserQRInfoActivity
+        onView(withId(R.id.deleteQR)).check(matches(isDisplayed()));
+    }
+
+    /**
+     * We test if activity has delete button is clicked
+     */
+    @Test
+    public void deleteTest() {
+        // we see if there is a delete button is clicked
+        onView(withId(R.id.deleteQR)).perform(click());
+    }
 
     /**
      * We test if activity is started
