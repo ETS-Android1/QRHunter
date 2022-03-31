@@ -29,6 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 // the leaderboard activity displayed to users
@@ -180,13 +181,20 @@ public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardA
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                                     try {
-                                        Double scoreFromDoc = (Double) documentSnapshot.getData().get("score");
-                                        if (highestRanking[0] < (scoreFromDoc)) {
-                                            highestRanking[0] = myMapOfCodes.get(el);
-                                        }
-                                        score[0] = score[0] + scoreFromDoc;
-                                        myMapOfCodes.put(el, scoreFromDoc);
                                         count2[0] = count2[0] + 1;
+                                        if (!documentSnapshot.exists() || documentSnapshot.getData().isEmpty())  {
+
+                                        } else {
+                                            Map<String, Object> doc = documentSnapshot.getData();
+                                            Double scoreFromDoc = (Double) doc.get("score");
+                                            score[0] = score[0] + scoreFromDoc;
+                                            myMapOfCodes.put(el, scoreFromDoc);
+
+                                            if (highestRanking[0] < (scoreFromDoc)) {
+                                                highestRanking[0] = myMapOfCodes.get(el);
+                                            }
+                                        }
+
                                         if (count2[0] == count[0]) {
                                             LeaderBoardHolder holder;
                                             if (method.equals("TOTAL")) {
@@ -203,6 +211,10 @@ public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardA
                                             }
                                         }
                                     } catch (Exception e) {
+                                        Map<String, Object> doc = documentSnapshot.getData();
+
+                                        String message = e.getMessage();
+                                        Log.w("Warning", doc.toString());
                                     }
                                 }
                             });
@@ -217,7 +229,13 @@ public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardA
      * this is called to sort the leaderboard holders
      */
     private void sortUsers() {
-        Collections.sort(leaderBoardHolders, Collections.reverseOrder());
+        Collections.sort(leaderBoardHolders, new Comparator<LeaderBoardHolder>(){
+
+            public int compare(LeaderBoardHolder o1, LeaderBoardHolder o2)
+            {
+                return Double.valueOf(o2.getUserScore()).compareTo(Double.valueOf(o1.getUserScore()));
+            }
+        });
         for(int i = 0; i<leaderBoardHolders.size(); i++){
             leaderBoardHolders.get(i).setUserRank(i+1);
         }
