@@ -184,7 +184,7 @@ public class PlayerProfile extends BaseNavigatableActivity implements AdapterVie
                     for (DocumentReference docRef : codeRefs) {
                         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (!task.isSuccessful()) {
+                                if (!task.isSuccessful() || !task.getResult().exists() || task.getResult().getData().isEmpty()) {
                                     return;
                                 }
                                 DocumentSnapshot document = task.getResult();
