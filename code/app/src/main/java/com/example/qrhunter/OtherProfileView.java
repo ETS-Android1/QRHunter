@@ -30,13 +30,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 public class OtherProfileView extends BaseNavigatableActivity implements AdapterView.OnItemClickListener {
 
-    TextView ProfileName, Total, Scanned, Highest, Lowest, RankOfTotal, RankOfScanned, RankOfHighest;
-    RecyclerView recyclerView;
+    TextView ProfileName, Total, Scanned, Highest, Lowest;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     ListView QRCode;
     ArrayList<QRCode> codes = new ArrayList<>();
@@ -70,11 +71,6 @@ public class OtherProfileView extends BaseNavigatableActivity implements Adapter
         getData();
 
     }
-    public void generate_token(View view){
-        if  (view.getId()==R.id.generate_button){
-            Toast.makeText(this,"token generated",Toast.LENGTH_SHORT).show();
-        }
-    }
     /**
      * gets the data of user from the database
      */
@@ -97,7 +93,22 @@ public class OtherProfileView extends BaseNavigatableActivity implements Adapter
                                         , (ArrayList<DocumentReference>) document.getData().get("scans"), (DocumentReference)
                                         document.getData().get("createdBy"), null);
                                 codes.add(myCode);
+
+                                double sum = 0;
+                                for (com.example.qrhunter.QRCode x: codes){
+                                    sum += x.getScore();
+                                }
+                                Total.setText("total: " + sum);
+                                Collections.sort(codes, new Comparator<com.example.qrhunter.QRCode>() {
+                                    @Override
+                                    public int compare(com.example.qrhunter.QRCode qrCode, com.example.qrhunter.QRCode t1) {
+                                        return Double.compare(t1.getScore(), qrCode.getScore());
+                                    }
+                                });
+
                                 Scanned.setText("scanned: " + codes.size());
+                                Lowest.setText("lowest: " +codes.get(codes.size()-1).getScore().toString());
+                                Highest.setText("highest: "+codes.get(0).getScore().toString());
                                 adapter = new CustomQRList(OtherProfileView.this, codes);;
                                 QRCode.setAdapter(adapter);
                             }
@@ -108,8 +119,6 @@ public class OtherProfileView extends BaseNavigatableActivity implements Adapter
                 }
                 ProfileName.setText("username: "+data.get("username").toString());
                 Total.setText("total: "+data.get("worth").toString());
-                Highest.setText("highest: "+data.get("highest").toString());
-                Lowest.setText("lowest: "+data.get("lowest").toString());
                 Scanned.setText("scanned: " + codes.size());
                 adapter = new CustomQRList(OtherProfileView.this, codes);;
                 QRCode.setAdapter(adapter);
@@ -129,8 +138,6 @@ public class OtherProfileView extends BaseNavigatableActivity implements Adapter
      */
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        //use this to get info of the clicked item
-        // adapterView.getItemAtPosition(i);
         Intent intent = new Intent(OtherProfileView.this, UserQRInfoActivity.class);
         QRCode code = codes.get(i);
         intent.putExtra("score", code.getScore());
@@ -143,11 +150,4 @@ public class OtherProfileView extends BaseNavigatableActivity implements Adapter
         intent.putExtra("scanners", ids);
         startActivity(intent);
     }
-    public String loadData() {
-        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        return sharedPref.getString("USERNAME-key", "default-empty-string");
-    }
-
-
-
 }
