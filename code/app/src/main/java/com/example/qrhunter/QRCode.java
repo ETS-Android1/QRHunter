@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.w3c.dom.Document;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ import java.util.Map;
 /**
  * this class represents the qrcodes that are scanned
  */
-public class QRCode {
+public class QRCode{
     Double score;
     String uniqueHash;
     ArrayList<DocumentReference> scans = new ArrayList<>();

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,8 +49,8 @@ public class ListCodesActivity extends BaseNavigatableActivity implements Adapte
     FirebaseFirestore db;
     ArrayList<String> qrCodeRef = new ArrayList<>();
     ArrayList<Double> score = new ArrayList<>();
-
-
+    TextView highest;
+    TextView lowest;
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activitylist_main;
@@ -69,6 +70,8 @@ public class ListCodesActivity extends BaseNavigatableActivity implements Adapte
         super.onCreate(savedInstanceState);
         this.getSupportActionBar().hide();
         db = FirebaseFirestore.getInstance();
+        lowest = findViewById(R.id.lowest);
+        highest = findViewById(R.id.highest);
         //final CollectionReference collectionReference = db.collection("Score");
         QRCode = findViewById(R.id.qr_list);
 
@@ -94,8 +97,10 @@ public class ListCodesActivity extends BaseNavigatableActivity implements Adapte
                         }
                     });
 
+
                     codeAdapter = new CustomQRList(ListCodesActivity.this, dummyQRlist);
                     QRCode.setAdapter(codeAdapter);
+
 
                 } else {
                     Log.d("ListActivity", "Error getting documents: ", task.getException());
