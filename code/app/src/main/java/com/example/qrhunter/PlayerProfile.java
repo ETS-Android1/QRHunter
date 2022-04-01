@@ -37,6 +37,9 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -48,7 +51,6 @@ public class PlayerProfile extends BaseNavigatableActivity implements AdapterVie
     ListView QRCode;
     ArrayList<QRCode> codes = new ArrayList<>();
     ArrayAdapter<QRCode> adapter;
-
     DocumentReference user;
     private Bitmap myMap;
     private String message;
@@ -192,7 +194,20 @@ public class PlayerProfile extends BaseNavigatableActivity implements AdapterVie
                                         , (ArrayList<DocumentReference>) document.getData().get("scans"), (DocumentReference)
                                         document.getData().get("createdBy"), null);
                                 codes.add(myCode);
+                                double sum  = 0;
+                                for(com.example.qrhunter.QRCode x : codes){
+                                    sum += x.getScore();
+                                }
+                                Total.setText("Total: "+sum);
+                                Collections.sort(codes, new Comparator<com.example.qrhunter.QRCode>() {
+                                    @Override
+                                    public int compare(com.example.qrhunter.QRCode qrCode, com.example.qrhunter.QRCode t1) {
+                                        return Double.compare(t1.getScore(), qrCode.getScore());
+                                    }
+                                });
                                 Scanned.setText("scanned: " + codes.size());
+                                Lowest.setText("lowest: " +codes.get(codes.size()-1).getScore().toString());
+                                Highest.setText("highest: "+codes.get(0).getScore().toString());
                                 adapter = new CustomQRList(PlayerProfile.this, codes);;
                                 QRCode.setAdapter(adapter);
                             }
@@ -203,8 +218,7 @@ public class PlayerProfile extends BaseNavigatableActivity implements AdapterVie
                 }
                 ProfileName.setText(userData.get("username").toString());
                 Total.setText("total: "+userData.get("worth").toString());
-                Highest.setText("highest: "+userData.get("highest").toString());
-                Lowest.setText("lowest: "+userData.get("lowest").toString());
+
                 Scanned.setText("scanned: " + codes.size());
                 adapter = new CustomQRList(PlayerProfile.this, codes);;
                 QRCode.setAdapter(adapter);
@@ -242,6 +256,7 @@ public class PlayerProfile extends BaseNavigatableActivity implements AdapterVie
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         return sharedPref.getString("USERNAME-key", "default-empty-string");
     }
+
 
 
 }
