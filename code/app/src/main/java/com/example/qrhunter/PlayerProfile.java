@@ -46,7 +46,7 @@ import java.util.UUID;
 
 public class PlayerProfile extends BaseNavigatableActivity implements AdapterView.OnItemClickListener {
 
-    TextView ProfileName, Total, Scanned, Highest, Lowest, RankOfTotal, RankOfScanned, RankOfHighest;
+    TextView ProfileName, Total, Scanned, Highest, Lowest;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     ListView QRCode;
     ArrayList<QRCode> codes = new ArrayList<>();
