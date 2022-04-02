@@ -82,6 +82,7 @@ public class OtherProfileView extends BaseNavigatableActivity implements Adapter
                 Map<String, Object> data = value.getData();
                 try {
                     ArrayList<DocumentReference> codeRefs = (ArrayList<DocumentReference>) data.get("codes");
+                    codes.clear();
                     for (DocumentReference docRef : codeRefs) {
                         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
