@@ -183,6 +183,7 @@ public class PlayerProfile extends BaseNavigatableActivity implements AdapterVie
                 Map<String, Object> userData = value.getData();
                 try {
                     ArrayList<DocumentReference> codeRefs = (ArrayList<DocumentReference>) userData.get("codes");
+                    codes.clear();
                     for (DocumentReference docRef : codeRefs) {
                         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -193,6 +194,7 @@ public class PlayerProfile extends BaseNavigatableActivity implements AdapterVie
                                 QRCode myCode = new QRCode(document.getReference(), (String) document.getId(), (ArrayList<DocumentReference>) document.getData().get("scanners")
                                         , (ArrayList<DocumentReference>) document.getData().get("scans"), (DocumentReference)
                                         document.getData().get("createdBy"), null);
+
                                 codes.add(myCode);
                                 double sum  = 0;
                                 for(com.example.qrhunter.QRCode x : codes){
