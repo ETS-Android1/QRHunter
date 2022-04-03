@@ -43,7 +43,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
+// a class which demonstrates a player profile activity
 public class PlayerProfile extends BaseNavigatableActivity implements AdapterView.OnItemClickListener {
 
     TextView ProfileName, Total, Scanned, Highest, Lowest;

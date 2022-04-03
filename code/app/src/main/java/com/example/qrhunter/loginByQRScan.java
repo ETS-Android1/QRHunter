@@ -29,7 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.zxing.Result;
-
+// login byu scanning a code
 public class loginByQRScan extends AppCompatActivity {
 
     Intent intent;
