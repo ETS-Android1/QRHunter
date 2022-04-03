@@ -16,7 +16,7 @@ public class CommentTest {
      */
     private ArrayList<Comment> mockCommentList() {
         ArrayList<Comment> commentListData = new ArrayList<Comment>();
-        commentListData.add(new Comment("test", "Some example comment."));
+        commentListData.add(new Comment("Some example comment."));
         return commentListData;
     }
 
@@ -27,7 +27,7 @@ public class CommentTest {
     public void testAddComment() {
         ArrayList<Comment> commentList = mockCommentList();
         assertEquals(1, commentList.size());
-        commentList.add(new Comment("test2", "Another example comment"));
+        commentList.add(new Comment("Another example comment"));
         assertEquals(2, commentList.size()); // check if size changed
     }
 

@@ -61,8 +61,11 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
     private ArrayAdapter<String> seenAdapter;
     private FirebaseFirestore  db = FirebaseFirestore.getInstance();
     final CollectionReference collectionUserReference = db.collection("User");
-    ImageView scanned;
+    private ImageView scanned;
 
+    /**
+     * We go into another activity if a name is clicked
+     */
     public void name_clicked(View v) {
         TextView t = (TextView) v;
         String name = String.valueOf(t.getText());
@@ -135,10 +138,12 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
         collectionQrReference.document(hash).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                // find image
                 if (documentSnapshot.getData().containsKey("image")) {
                     new ImageFile(findViewById(R.id.qr_info_image))
                             .execute((String) documentSnapshot.getData().get("image"));
                 }
+                // find location
                 if (documentSnapshot.getData().containsKey("location")) {
                     DocumentReference location = (DocumentReference) documentSnapshot.getData().get("location");
                     location.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -204,9 +209,11 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                     collectionReference.document(hash).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            // we update if comments already exists
                             if (task.getResult().exists()) {
                                 collectionReference.document(hash).update("comments", FieldValue.arrayUnion(commentData));
                             } else {
+                                // we create a new comment document if it does not exist
                                 List<String> newComments = new ArrayList<String>();
                                 newComments.add(commentData);
                                 CommentHelper newComment = new CommentHelper(newComments);
@@ -237,6 +244,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
 
                 for(QueryDocumentSnapshot doc: value)
                 {
+                    // get all comments
                     if (doc.exists() && doc.getId().equals(hash)) {
                         CommentHelper commentHelper = doc.toObject(CommentHelper.class);
                         for (String comment: commentHelper.getComments()) {
@@ -264,6 +272,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
 
                 for(QueryDocumentSnapshot doc: value)
                 {
+                    // we try to find all of those who have scanned this qr code
                     if (doc.exists() && doc.getId().equals(hash)) {
                         SeenHelper seenHelper = doc.toObject(SeenHelper.class);
                         if (seenHelper.getScanners() != null) {
@@ -306,12 +315,17 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
             }
         });
 
+        // fill in the lists
         commentAdapter = new CommentListAdapter(this, commentDataList);
         commentList.setAdapter(commentAdapter);
         seenAdapter = new ArrayAdapter<>(this, R.layout.seen_content, seenDataList);
         seenList.setAdapter(seenAdapter);
     }
 
+    /**
+     * This is used to determine if a qr code has been scanned by others
+     *
+     */
     @Override
     protected void onResume() {
         super.onResume();

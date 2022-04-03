@@ -4,6 +4,9 @@ package com.example.qrhunter;
 
 import java.util.List;
 
+/**
+ * This class is responsible for representing the data in comments document in order to find information
+ */
 public class CommentHelper {
     private List<String> comments;
 

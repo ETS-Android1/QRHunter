@@ -4,6 +4,9 @@ import com.google.firebase.firestore.DocumentReference;
 
 import java.util.List;
 
+/**
+ * This class is responsible for representing the data in qrcodes document in order to find information
+ */
 public class SeenHelper {
     private DocumentReference createdBy;
     private String image;

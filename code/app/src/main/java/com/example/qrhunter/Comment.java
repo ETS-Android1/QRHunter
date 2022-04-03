@@ -6,7 +6,6 @@ package com.example.qrhunter;
  * This class is responsible for representing a comment
  */
 public class Comment {
-    private String user;
     private String comment;
 
     public Comment(String comment) {
