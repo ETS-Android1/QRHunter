@@ -16,10 +16,11 @@ public class PlayerProfileTest {
 
 
 
+
     @Test
     public void startTest() {
         onView(withId(R.id.generate_button)).perform(click());
-        onView(withId(R.id.recyclerViewPlayerProfile)).perform(click());
+        onView(withId(R.id.generate_status)).perform(click());
     }
 }
 

@@ -4,13 +4,11 @@ package com.example.qrhunter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,10 +23,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.codec.digest.DigestUtils;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -40,14 +34,8 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class is responsible for displaying QR information from a selected user QR code
@@ -199,7 +187,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                 // we add to the database based on the user passed from the previous activity
                 String commentData = addComment.getText().toString();
                 if (commentData != "") {
-                    commentDataList.add(new Comment(commentData));
+                    commentDataList.add(new Comment("test2", commentData));
 
                     collectionReference.document(hash).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -240,7 +228,7 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
                     if (doc.exists() && doc.getId().equals(hash)) {
                         CommentHelper commentHelper = doc.toObject(CommentHelper.class);
                         for (String comment: commentHelper.getComments()) {
-                            commentDataList.add(new Comment(comment));
+                            commentDataList.add(new Comment("test2", comment));
                         }
                     }
                 }
