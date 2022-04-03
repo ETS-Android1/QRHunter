@@ -9,7 +9,7 @@ public class Comment {
     private String user;
     private String comment;
 
-    public Comment(String comment) {
+    public Comment(String test2, String comment) {
         this.comment = comment;
     }
 
