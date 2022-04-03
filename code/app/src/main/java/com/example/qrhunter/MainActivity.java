@@ -10,7 +10,9 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -27,15 +29,22 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends BaseNavigatableActivity {
-    Button userQRInfo;
-    Button profileQRInfo;
-    Button leader;
-    Button playerProfile;
+    private static final String SHARED_PREFS = "USERNAME-sharedPrefs";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         Button login = findViewById(R.id.login);
+        String user = this.loadData();
+        Intent intent;
+        if (user.equals("default-empty-string")) {
+            intent = new Intent(MainActivity.this, Login_Signup_Activity.class);
+        } else {
+            intent = new Intent(MainActivity.this, QRScanActivity.class);
+        }
+        startActivity(intent);
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,5 +71,12 @@ public class MainActivity extends BaseNavigatableActivity {
         return R.id.camera;
     }
 
-
+    /**
+     * loads USERNAME from SharedPreferences
+     * @return username used to login
+     */
+    public String loadData() {
+        SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        return sharedPref.getString("USERNAME-key", "default-empty-string");
+    }
 }
