@@ -153,10 +153,10 @@ public class UserQRInfoActivity extends BaseNavigatableActivity {
             @Override
             public void onClick(View view) {
                 String user = sharedPref.getString("USERNAME-key", null);
-                String deleteCode = "/qrcodes/" + hash;
-
-                collectionUserReference.document(user)
-                        .update("codes", FieldValue.arrayRemove(deleteCode))
+                DocumentReference deleteCode =  collectionQrReference.document(hash);
+                DocumentReference userRef = collectionUserReference.document(user);
+                deleteCode.update("scanners", FieldValue.arrayRemove(userRef));
+                userRef.update("codes", FieldValue.arrayRemove(deleteCode))
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
