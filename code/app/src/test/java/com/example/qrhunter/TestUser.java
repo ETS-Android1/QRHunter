@@ -1,7 +1,8 @@
 package com.example.qrhunter;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class TestUser {
 
@@ -10,7 +11,7 @@ public class TestUser {
     }
 
     @Test
-    void testUser() {
+    public void testUser() {
         User u = testUser("testname", "testpass", "testemail", "testPhone123");
         assertEquals("testname", u.getUsername());
         assertEquals(null, u.getUniqueQRHash());

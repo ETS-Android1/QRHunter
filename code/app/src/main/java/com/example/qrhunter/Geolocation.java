@@ -45,7 +45,6 @@ public class Geolocation {
         data.put("location", new GeoPoint(location.latitude, location.longitude));
         data.put("address", address);
         data.put("scan", scan);
-        Log.i("LOCATION ID", locationRef.getId());
         locationRef.set(data).addOnCompleteListener(l);
     }
     /**
