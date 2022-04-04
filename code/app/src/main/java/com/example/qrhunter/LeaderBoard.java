@@ -264,6 +264,10 @@ public class LeaderBoard extends BaseNavigatableActivity implements LeaderBoardA
         startActivity(intent);
     }
 
+    /**
+     * loads username from shared prefs
+     * @return the username of logged in used
+     */
     public String userNameLoad() {
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         return sharedPref.getString("USERNAME-key", "default-empty-string");

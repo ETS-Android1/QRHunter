@@ -35,94 +35,84 @@ public class User {
         this.worth = 0f;
     }
 
+    /**
+     * gets the user name
+     * @return user name
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * sets the user name
+     * @param username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * gets the password
+     * @return password
+     */
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
+    /**
+     * gets the email
+     * @return email
+     */
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    /**
+     * gets the phone number
+     * @return phone number
+     */
     public String getPhoneNum() {
         return phoneNum;
     }
 
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
-    }
-
+    /**
+     * gets the unique hash
+     * @return the unique hash
+     */
     public String getUniqueQRHash() {
         return uniqueQRHash;
     }
 
-    public void setUniqueQRHash(QRCode uniqueQRCode) {
-        String hash = uniqueQRCode.getUniqueHash();
-        this.uniqueQRHash = hash;
-    }
-
+    /**
+     * gets the scanned codes
+     * @return scanned codes
+     */
     public ArrayList<QRCode> getScannedQRCodes() {
         return scannedQRCodes;
     }
 
-    public void setScannedQRCodes(ArrayList<QRCode> scannedQRCodes) {
-        this.scannedQRCodes = scannedQRCodes;
-    }
-
-    public Float getTotalScore() {
-        return totalScore;
-    }
-
-    public void setTotalScore(Float totalScore) {
-        this.totalScore = totalScore;
-    }
-
+    /**
+     * gets highest code
+     * @return highest code
+     */
     public Float getHighest() {
         return highest;
     }
 
-    public void setHighest(Float highest) {
-        this.highest = highest;
-    }
-
+    /**
+     * gets the lowest code
+     * @return lowest code
+     */
     public Float getLowest() {
         return lowest;
     }
 
-    public void setLowest(Float lowest) {
-        this.lowest = lowest;
-    }
-
+    /**
+     * gets the worth
+     * @return worth
+     */
     public Float getWorth() {
         return worth;
     }
 
-    public void setWorth(Float worth) {
-        this.worth = worth;
-    }
-
-    public boolean addQRCode(QRCode qrcode) {
-        if (scannedQRCodes.add(qrcode)) return true;
-        else return false;
-    }
-
-    public boolean addComment(String comment, QRCode qrcode) {
-        //TODO
-        return false;
-    }
 }

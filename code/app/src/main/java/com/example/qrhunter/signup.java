@@ -25,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-
+// signup activity
 public class signup extends AppCompatActivity {
     private TextInputLayout txtInputUsername, txtInputPass, txtInputConfirmPass, txtInputEmail, txtInputPhone;
     private Button btnConfirm, btnCancel;

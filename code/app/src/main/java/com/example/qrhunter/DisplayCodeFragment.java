@@ -70,6 +70,7 @@ public class DisplayCodeFragment extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
 
@@ -113,6 +114,7 @@ public class DisplayCodeFragment extends DialogFragment {
             textView.setText(message);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

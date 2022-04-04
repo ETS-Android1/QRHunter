@@ -10,21 +10,41 @@ public class LeaderBoardHolder implements Comparable<LeaderBoardHolder>{
         this.userScore = userScore;
     }
 
+    /**
+     * gets the user name
+     * @return the user name
+     */
     public String getUserName() {
         return userName;
     }
 
+    /**
+     * sets the user name
+     */
     public void setUserScore(String userScore) {
         this.userScore= userScore;
     }
+
+    /**
+     * gets the user score
+     * @return the user score
+     */
     public String getUserScore() {
         return userScore;
     }
 
+    /**
+     * gets the user rank
+     * @return user rank
+     */
     public int getUserRank() {
         return userRank;
     }
 
+    /**
+     * sets the user rank
+     * @param userRank
+     */
     public void setUserRank(int userRank) {
         this.userRank = userRank;
     }

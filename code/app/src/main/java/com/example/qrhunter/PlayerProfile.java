@@ -253,7 +253,10 @@ public class PlayerProfile extends BaseNavigatableActivity implements AdapterVie
         intent.putExtra("scanners", ids);
         startActivity(intent);
     }
-
+    /**
+     * gets the user name
+     * @return the user name
+     */
     public String loadData() {
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         return sharedPref.getString("USERNAME-key", "default-empty-string");

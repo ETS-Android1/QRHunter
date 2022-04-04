@@ -64,26 +64,48 @@ public class QRCode{
         this.scanners = scanners;
     }
 
+    /**
+     * gets the number of scanners
+     * @return the number of scanners
+     */
     public int getNumScanners() {
         if (scanners == null) {
             return 0;
         }
         return scanners.size();
     }
+
+    /**
+     * gets the number of scans
+     * @return the number of scans
+     */
     public int getNumScans() {
         if (scans == null) {
             return 0;
         }
         return scans.size();
     }
+
+    /**
+     * gets the unique hash
+     * @return the unique hash
+     */
     public String getUniqueHash() {
         return uniqueHash;
     }
 
+    /**
+     * gets the player who created
+     * @return player who created
+     */
     public DocumentReference getPlayer() {
                 return player;
         }
 
+    /**
+     * gets the score
+     * @return the score
+     */
     public Double getScore() {
         return score;
     }
@@ -119,7 +141,6 @@ public class QRCode{
     };
 
     public QRCode() {
-        //TODO
     }
     /**
      * Called to upload a qrcode to firebase

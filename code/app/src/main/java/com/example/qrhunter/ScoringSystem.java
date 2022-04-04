@@ -22,7 +22,6 @@ public class ScoringSystem {
     public ScoringSystem() {
 
     }
-    // TODO implement more sophisticated scoring system
     /**
      * A function that calculates the score from a hash
      * @param hash
@@ -34,22 +33,6 @@ public class ScoringSystem {
             score = score + el;
         }
         return score;
-    }
-
-    public QRCode getGlobalHighestScoringQRCode() {
-        QRCode highestScoringCode;
-        //TODO
-        return new QRCode();
-    }
-
-    public QRCode getHighestScoringCodeForUser(User u) {
-        //TODO
-        return new QRCode();
-    }
-
-    public QRCode getLowestScoringCodeForUser(User u) {
-        //TODO
-        return new QRCode();
     }
 
 

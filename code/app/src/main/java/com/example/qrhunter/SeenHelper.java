@@ -3,7 +3,7 @@ package com.example.qrhunter;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.List;
-
+// a helper to manage data
 public class SeenHelper {
     private DocumentReference createdBy;
     private String image;
@@ -13,43 +13,44 @@ public class SeenHelper {
     private Double score;
     private Double timeCreated;
 
-    public SeenHelper() {}
-
-    public SeenHelper(DocumentReference createdBy, String image, DocumentReference location, List<DocumentReference> scanners, List<DocumentReference> scans, Double score, Double timeCreated) {
-        this.createdBy = createdBy;
-        this.image = image;
-        this.location = location;
-        this.scanners = scanners;
-        this.scans = scans;
-        this.score = score;
-        this.timeCreated = timeCreated;
-    }
-
+    /**
+     * get who created this code
+     * @return created by reference
+     */
     public DocumentReference getCreatedBy() {
         return createdBy;
     }
 
-    public String getImage() {
-        return image;
-    }
-
+    /**
+     * get who location this code
+     * @return location reference
+     */
     public DocumentReference getLocation() {
         return location;
     }
 
+    /**
+     * get scanners
+     * @return scanners reference
+     */
     public List<DocumentReference> getScanners() {
         return scanners;
     }
 
+    /**
+     * get scans
+     * @return scans reference
+     */
     public List<DocumentReference> getScans() {
         return scans;
     }
 
+    /**
+     * get score
+     * @return score
+     */
     public Double getScore() {
         return score;
     }
 
-    public Double getTimeCreated() {
-        return timeCreated;
-    }
 }

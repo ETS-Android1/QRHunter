@@ -102,6 +102,7 @@ public class LeaderBoardAdapter extends RecyclerView.Adapter<LeaderBoardAdapter.
 
         }
     }
+
     public interface OnItemListener{
         void OnItemClick(int position);
     }
