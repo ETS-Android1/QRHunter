@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="500dp"
             android:padding="20dp"
-            android:layout_below="@+id/leaderBoardTextViewRankByScan"
+            android:layout_below="@+id/leaderBoardTextViewRankByScore"
             android:layout_marginTop="5dp"></androidx.recyclerview.widget.RecyclerView>
 
 
