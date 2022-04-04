@@ -19,7 +19,7 @@ public class LeaderBoardHolder implements Comparable<LeaderBoardHolder>{
     }
 
     /**
-     * sets the user name
+     * sets the user score
      */
     public void setUserScore(String userScore) {
         this.userScore= userScore;
@@ -58,6 +58,6 @@ public class LeaderBoardHolder implements Comparable<LeaderBoardHolder>{
 
     @Override
     public int compareTo(LeaderBoardHolder leaderBoardHolder) {
-        return toString().compareTo(leaderBoardHolder.toString());
+        return Double.valueOf(this.getUserScore()).compareTo(Double.valueOf(leaderBoardHolder.getUserScore()));
     }
 }
