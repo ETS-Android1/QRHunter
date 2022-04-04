@@ -51,13 +51,13 @@ public class loginByQRScan extends AppCompatActivity {
         scannerView = findViewById(R.id.scanner_view_login);
 
         try {
-            Toast.makeText(loginByQRScan.this, "Hehehehe", Toast.LENGTH_LONG).show();
+//             Toast.makeText(loginByQRScan.this, "Hehehehe", Toast.LENGTH_LONG).show();
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 //ask for authorisation
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
             } else {
                 setup();
-                Toast.makeText(loginByQRScan.this, "HERERER", Toast.LENGTH_LONG).show();
+//                 Toast.makeText(loginByQRScan.this, "HERERER", Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             String msg = e.getMessage();
